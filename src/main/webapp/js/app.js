@@ -1,5 +1,6 @@
 class ShoppingListApp {
-    _items = []
+    REST_URL = "/api/shoppingList/items";
+    _items = [];
 
     constructor(container, itemTemplate, form) {
         console.log("initializing");
@@ -10,9 +11,8 @@ class ShoppingListApp {
 
     async load() {
         try {
-            let response = await fetch("https://jsonplaceholder.typicode.com/users/1/todos");
-            let items = await response.json();
-            this._items = items.slice(0, 3); // Slice to reduce the initial size
+            let response = await fetch(this.REST_URL);
+            this._items = await response.json();
             this._render();
         } catch (error) {
             console.error(error)
@@ -44,13 +44,13 @@ class ShoppingListApp {
 
     async storeItem(newItem) {
         try {
-            let response = await fetch('https://jsonplaceholder.typicode.com/todos', {
+            let response = await fetch(this.REST_URL, {
                 method: 'POST',
                 body: JSON.stringify(newItem),
                 headers: {
                     "Content-type": "application/json; charset=UTF-8"
                 }
-            })
+            });
             let json = await response.json();
             this._items.push(json);
             this._render();
@@ -62,10 +62,7 @@ class ShoppingListApp {
 
     async deleteItem(deleted) {
         try {
-            let response = await fetch(
-                `https://jsonplaceholder.typicode.com/users/1/todos/${deleted.id}`,
-                { method: 'DELETE' }
-            )
+            let response = await fetch(this.REST_URL + `?id=${deleted.id}`, { method: 'DELETE' });
             this._items = this._items.filter(item => item !== deleted);
             this._render();
         } catch (error) {

@@ -3,17 +3,19 @@
 
 <head>
     <title>Shopping list demo app</title>
-    <script src="app.js"></script>
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
 
+    <script src="js/app.js"></script>
+    
     <!-- simple classless CSS stylesheet, see: https://github.com/oxalorg/sakura -->
     <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
 </head>
 
 <body>
-    <h1>Shopping list demo app</h1>
+    <h2>📄 Shopping list demo app</h2>
 
     <form id="add-new-form">
-        <input id="new-item-title" required type="text" placeholder="type item here..." />
+        <input id="new-item-title" required type="text" placeholder=" type item here..." />
         <input type="submit" id="add-new-item" value="Add to list" />
     </form>
 
@@ -21,7 +23,7 @@
         <thead>
             <tr>
                 <th>Title</th>
-                <th>Remove</th>
+                <th></th>
             </tr>
         </thead>
         <tbody id="list-items">
@@ -29,6 +31,15 @@
         </tbody>
     </table>
 
+    <hr />
+
+    <p>
+        <em>This is a demo application for demonstrating the use of Ajax in JavaScript and Java based web
+            applications.</em>
+    </p>
+    <p>
+        <em>Any changes you make to the shopping list will not be saved between server restarts!</em>
+    </p>
 
     <template id="list-item-template">
         <tr>
