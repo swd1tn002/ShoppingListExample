@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +21,7 @@ public class ShoppingListRestServlet extends HttpServlet {
     private ShoppingListItemDao dao = new ShoppingListItemDao();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         List<ShoppingListItem> allItems = dao.getAllItems();
 
         // convert the Java objects into a JSON formatted String:
@@ -33,10 +32,9 @@ public class ShoppingListRestServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("application/json;charset=UTF-8");
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-        // read all lines from the POST request body and joins them into one String:
+        // read all lines from the POST request body and join them into one String:
         String jsonString = req.getReader().lines().collect(Collectors.joining());
 
         // convert the read JSON input from a String into a ShoppingListItem object:
@@ -46,13 +44,12 @@ public class ShoppingListRestServlet extends HttpServlet {
 
         String json = new Gson().toJson(newItem);
 
-        resp.setContentType("application/json");
+        resp.setContentType("application/json;charset=UTF-8");
         resp.getWriter().println(json);
     }
 
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("application/json;charset=UTF-8");
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
         long id = Long.parseLong(req.getParameter("id"));
         ShoppingListItem item = dao.getItem(id);
@@ -63,7 +60,7 @@ public class ShoppingListRestServlet extends HttpServlet {
 
         String json = new Gson().toJson(item);
 
-        resp.setContentType("application/json");
+        resp.setContentType("application/json;charset=UTF-8");
         resp.getWriter().println(json);
     }
 }

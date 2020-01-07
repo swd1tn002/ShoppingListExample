@@ -2,24 +2,47 @@
 
 Tämän projektin on tarkoitus esitellä Haaga-Helian [Ohjelmointi 2](https://opinto-opas.haaga-helia.fi/course_unit/SWD4TN033) -opintojaksolla opeteltavia web-teknologioita käytännössä.
 
-Tähän dokumentaatioon sekä tässä samassa Git-repositoriossa sijaitsevaan valmiiseen koodiin perehtymällä saat peruskäsityksen yksinkertaistetun verkkosovelluksen toteuttamisesta Javalla, Servleteillä, JavaScriptillä sekä Ajax-teknologioilla. Valmiuksia tuotantokelpoisen, tehokkaan ja tietoturvallisen verkkosovelluksen kehittämiseen et vielä tätä projektia seuraamalla saa.
+Tähän dokumentaatioon sekä tässä samassa Git-repositoriossa sijaitsevaan valmiiseen koodiin perehtymällä saat peruskäsityksen yksinkertaistetun verkkosovelluksen toteuttamisesta Javalla, Servleteillä, JavaScriptillä sekä Ajax-teknologioilla. Esimerkkisovelluksesta on jätetty pois oikeassa verkkopalvelussa oleellisia ominaisuuksia, kuten käyttäjän tunnistautuminen, joiden toteuttamiseen voit perehtyä tämän esimerkin jälkeen. Voit halutessasi myös jatkokehittää tätä esimerkkisovellusta hyödyntämään oikeaa tietokantaa tai tukemaan useita samanaikaisia ostoslistoja.
 
-## Projektin palaset
+## Sovelluksen osat
 
-Projektin Java-osuus on toteutettu Maven-työkalun avulla. Maven-työkalua käytettäessä projektin riippuvuudet, kuten TomCat-palvelinohjelmisto sekä [Gson-kirjasto](https://github.com/google/gson), määritellään [pom.xml](pom.xml)-tiedostoon, jonka avulla projekti on helppoa asentaa, kääntää ja pakata automaattisesti.
+### Java-backend
 
-Maven-projektin rakenne noudattaa Heroku-pilvialustan esimerkkiä (Create a Java Web Application Using Embedded Tomcat)[https://devcenter.heroku.com/articles/create-a-java-web-application-using-embedded-tomcat].
+Esimerkkisovelluksen Java-osuus koostuu kolmesta luokasta sekä palvelimen käynnistämiseksi tehdystä [Main](src/main/java/launch/Main.java)-luokasta:
 
-### Projektin tiedostot
-Java-tiedostot
-index.html
-app.js
+[ShoppingListRestServlet](src/main/java/servlet/ShoppingListRestServlet.java)-luokka vastaa selaimelta tuleviin pyyntöihin seuraavien HTTP-metodeja vastaavien metodien avulla:
+* `doGet` palauttaa ostoslistan sisällön JSON-muodossa
+* `doPost` ottaa vastaan uuden `ShoppingListItem`-olion ja tallentaa sen
+* `doDelete` poistaa annetulla `id`:llä varustetun `ShoppingListItem`-rivin palvelimelta
 
-## Asentaminen omalle koneelle
+[ShoppingListItem](src/main/java/model/ShoppingListItem.java) on Model-luokka, joka mallintaa yksittäistä ostoslistan riviä, jolla on kaksi attribuuttia:
+* `id` (long)
+* `title` (String)
 
-Eclipsen Git-kloonaus. TODO: project-tiedostot? linkki: https://www.omnijava.com/2016/07/10/importing-maven-projects-from-git-into-eclipse-that-were-created-by-netbeans/
+[ShoppingListItemDao](src/main/java/database/ShoppingListItemDao.java)-luokka esittää DAO-mallin mukaista tietokantaluokkaa joka vastaa tiedon välittämisestä tietokannan ja muiden Java-luokkien välillä. Esimerkkisovelluksen yksinkertaistamiseksi ja sen riippuvuuksien minimoimiseksi luokka on toteutettu pitämään tietovarastonaan yksinkertaista `ArrayList`-oliota, joka alustetaan aina palvelimen uudelleenkäynnistyksen yhteydessä. 
 
-Kun tiedostot on kloonattu ja projektin riippuvuudet asennettu Maven-työkalulla, voit käynnistää back end -palvelimen suorittamalla tiedoston [`src/main/java/launch/Main.java`](src/main/java/launch/Main.java). Main-luokan tarkoitus on käynnistää Tomcat-palvelin [tämän tutoriaalin](https://devcenter.heroku.com/articles/create-a-java-web-application-using-embedded-tomcat) mukaisesti ja luokan sisältöä ei tarvitse ymmärtää tämän oppimateriaalin seuraamiseksi.
+### Tomcat-palvelinohjelmisto
+
+Servlet-pohjaiset sovellukset tarvitsevat aina jonkin suoritusympäristön, joka tällä esimerkkiprojektilla on nimeltään Tomcat. Tomcat ja muut sovelluksen riippuvuudet on helpointa asentaa Maven-työkalua käyttäen, jota varten projektista löytyy valmis "Project Object Model"-tiedosto eli [pom.xml](pom.xml).
+
+Maven-projekti on rakennettu noudattaen Heroku-pilvialustan esimerkkiä ("Create a Java Web Application Using Embedded Tomcat")[https://devcenter.heroku.com/articles/create-a-java-web-application-using-embedded-tomcat].
+
+### JavaScript front-end
+
+Sovelluksen selainkäyttöliittymä koostuu kahdesta tiedostosta:
+
+[app.js](src/main/webapp/js/app.js) sisältää kaiken JavaScript-toimintalogiikan `ShoppingListApp`-nimisessä luokassa. Luokan avulla on mahdollista näyttää kaikki ostoslistan rivit sekä lisätä ja poistaa rivejä yksi kerrallaan.
+
+[index.html](src/main/webapp/index.html) sisältää sivun sovelluksen tarvitseman käyttöliittymän, joka koostuu rivien lisäämiseen käytettävästä lomakkeesta, ostoslistan esittävästä HTML-taulukosta sekä selaimessa näkymättömäksi jäävästä `template`-pohjasta, jota hyödynnetään JavaScript-puolella uusien ostoslistarivien renderöimiseksi.
+
+Lisäksi sovelluksessa hyödynnetään [Sakura](https://unpkg.com/sakura.css/css/sakura.css)-nimistä avoimen lähdekoodin CSS-kirjastoa, joka valikoitui sovellukseen siksi, että se ei vaadi lainkaan luokkien tai id-attribuuttien määrittelemistä sivun HTML-rakenteeseen.
+
+
+### Asentaminen omalle koneelle
+
+Suorittaaksesi sovelluksen ja muokataksesi sitä omalla koneellasi sinun on tuotava projekti GitHubista omaan Eclipseesi. Tämän pitäisi olla suoraviivainen operaatio Eclipsen import-ominaisuuden avulla, jonka käyttämiseksi voit [katsoa videon](https://www.youtube.com/watch?v=hiij77tpDM4) tai [selata ohjeita](https://www.google.com/search?q=eclipse+clone+from+github).
+
+Kun projekti on "kloonattu" ja Maven-työkalu on asentanut sen riippuvuudet, voit käynnistää back end -palvelimen suorittamalla tiedoston [`src/main/java/launch/Main.java`](src/main/java/launch/Main.java). Main-luokan tarkoitus on käynnistää Tomcat-palvelin [tämän tutoriaalin](https://devcenter.heroku.com/articles/create-a-java-web-application-using-embedded-tomcat) mukaisesti ja Main-luokan sisältöä ei tarvitse ymmärtää tämän oppimateriaalin seuraamiseksi.
 
 Kun palvelin on käynnistynyt, ota siihen yhteys selaimellasi kirjoittamalla osoiteriville http://localhost:8080.
 
@@ -27,11 +50,14 @@ Kun palvelin on käynnistynyt, ota siihen yhteys selaimellasi kirjoittamalla oso
 
 Voit nyt kokeilla tekstirivien lisäämistä sekä poistamista käyttämällä ostoslistan yläpuolista tekstikenttää sekä rivien x-painikkeita.
 
+
 ## Esimerkkiprojektin JavaScript-osuus
 
 Tässä esimerkkisovelluksessa ja siihen liittyvässä dokumentaatiossa oletetaan sekä JavaScript-kielen että siihen liittyvien kehitysympäristöjen olevan lukijalle jo jokseenkin tuttuja.
 
-Esimerkki on pyritty rakentamaan siten, että siinä noudatetaan yleisesti hyviksi todettuja käytäntöjä esimerkiksi koodin nimeämisessä sekä jäsentämisessä luokkiin ja metodeihin. Ero ohjelmointityylissä on pyritty tekemään mahdollisimman pieneksisovellettujen Java- ja JavaScript käytäntöjen välillä.
+Esimerkki on pyritty rakentamaan siten, että siinä noudatetaan yleisesti hyviksi todettuja käytäntöjä esimerkiksi koodin nimeämisessä sekä jäsentämisessä luokkiin ja metodeihin. Ero ohjelmointityylissä onkin pyritty tekemään mahdollisimman pieneksisovellettujen Java- ja JavaScript käytäntöjen välillä.
+
+JavaScript-koodissa ohjelman rakenne saattaa usein muuttua melkoiseksi spagetiksi, jossa yksittäiset metodit pitävät sisällään niin tietoliikenteeseen kuin HTML-rakenteen käsittelyyn liittyviä toimenpiteitä. Tässä esimerkissä pyritään jakamaan ohjelma tarkasti erillisiin osiin, vaikka se yksittäisiä esimerkkejä hieman monimutkaistaisikin.
 
 ### Nuolifunktiot
 
@@ -43,7 +69,7 @@ function(a, b) {
 }
 ```
 
-Nuolifunktioiden ja tavallisten anonyymien funktioiden syntaksin lisäksi myös niiden toiminnassa on eroja:
+Nuolifunktioiden ja tavallisten anonyymien funktioiden syntaksin lisäksi myös niiden toiminnassa on kuitenkin tärkeitä eroja:
 
 >The handling of this is also different in arrow functions compared to regular functions.
 >
@@ -55,7 +81,7 @@ Nuolifunktioiden ja tavallisten anonyymien funktioiden syntaksin lisäksi myös 
 >
 > *[W3Schools](https://www.w3schools.com/js/js_arrow_function.asp)*
 
-Käytännössä edellä esitetty W3Schools:in selitys tarkoittaa sitä, että kahden seuraavan `onclick`-tapahtumakuuntelijan asettamisessa on myös muitakin eroja kuin ulkonäkö:
+Käytännössä edellä esitetty W3Schools:in selitys tarkoittaa sitä, että kahdesta tätä sovellusta varten koodatuista `onclick`-tapahtumakuuntelijoista vain jälkimmäinen oikeasti toimii:
 
 ```javascript
 // perinteinen anonyymi funktio 
@@ -69,24 +95,42 @@ removeButton.onclick = () => {
 };
 ```
 
-Perinteiseen tapaan (ylempi) toteutetussa tapahtumankuuntelijassa esiintyvä `this` ei funktiota suoritettaessa viittaakaan enää siihen olioon, jonka sisällä se on määritetty, vaan esimerkiksi siihen painikkeeseen jota klikattiin.
+Perinteiseen tapaan toteutetussa ylemmässä tapahtumankuuntelijassa esiintyvä `this` ei funktiota suoritettaessa viittaakaan enää siihen `ShoppingListApp`-olioon, jonka sisällä se on määritetty, vaan siihen painikkeeseen, jota klikattiin.
 
 Alemmassa nuolifunktiolla toteutetussa versiossa 
-`this`-muuttuja viittaa siihen olioon, jonka metodissa tapahtumakuuntelija asetettiin. Näin funktio on toteutettu myös [tämän projektin lähdekoodissa](src/main/webapp/js/app.js).
+`this`-muuttuja viittaa aina siihen olioon, jonka metodissa tapahtumakuuntelija asetettiin. Näin funktio on toteutettu myös [tämän projektin lähdekoodissa](src/main/webapp/js/app.js).
 
+[Kokeile esimerkkiä Codepen.io](https://codepen.io/h01581/pen/rNaJaEN):ssa.
 
-## Ajax
+### Ajax
 
-Termi "Ajax" on lyhenne sanoista "Asynchronous JavaScript and XML". Nykyään tiedostonsiirtoon käytetään XML-formaatin sijaan JSON-formaattia, mikä teknisestä näkökulmasta ei ole valtava muutos. 
+Termi "Ajax" on lyhenne sanoista "Asynchronous JavaScript and XML". Nykyään tiedostonsiirtoon käytetään XML-formaatin sijaan yksinkertaisempaa JSON-formaattia. 
 
 Ajax-teknologioita hyödynnetään tässä projektissa ostoslistan sisällön päivittämisessä dynaamisesti siten, että selain hakee taustalla dataa palvelimelta ja näyttää sen ilman erillistä sivulatausta. Vastaavasti tietojen lisääminen ja poistaminen eivät edellytä sivulatausta, vaan tieto siirtyy taustalla ja päivittyy sivulle dynaamisesti.
 
-### Mikä asynkronisuus?
 
-Ajax-teknologioiden asynkronisuus johtuu siitä, että JavaScript suoritetaan vain yhdessä säikeessä, jossa suoritetaan kerrallaan vain yhtä lauseketta. Jos esimerkiksi tiedonsiirto tehtäisiin synkronisesti, jumittuisi koko JavaScript-sovellus siksi aikaa kunnes tiedonsiirto valmistuu. Voit lukea lisää asynkronisesta ohjelmoinnista esimerkiksi artikkelista ["Understanding Asynchronous JavaScript"](https://blog.bitsrc.io/understanding-asynchronous-javascript-the-event-loop-74cd408419ff) ja Mozillan ["Asynchronous JavaScript" -oppimateriaalista](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous).
+#### Fetch, jQuery, XMLHttpRequest...
 
-### Callback, Promise ja Async/Await
-Hitaiden kutsujen ongelma JavaScript-maailmassa antamalla "hitaalle koodille" funktio, joka sen tulee suorittaa operaation valmistuttua. Tällaisia funktioita kutsutaan ns. callback-funktioiksi. Kun koodissa on tarpeen tehdä lukuisia perkkäisiä hitaita operaatioita, syntyy helposti syviä sisäkkäisiä rakenteita, joissa callback-funktiot kutsuvat uusia hitaita operaatioita ja antavat jälleen parametreina uusia callback-funktioita:
+Tämän esimerkkiprojektin tiedonsiirto on toteutettu hyödyntäen JavaScriptin omaa [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)-funktiota sekä `async/await`-ohjelmointityyliä. Vaihtoehtoisia toteutusteknologioita tiedonsiirrolle olisivat esimerkiksi [jQuery](https://jquery.com/)-kirjasto tai JavaScriptin vanhempi [XMLHttpRequest](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)-luokka, joita ei tässä materiaalissa käsitellä tarkemmin.
+
+Erillisiä kirjastoja välttämällä opit kirjoittamaan koodiasi yleisemmällä tasolla ja voit hyödyntää taitojasi myös nettisivujen ulkopuolella, esimerkiksi Node.js-sovelluksissa ja mobiilisovelluksissa.
+
+Aivan viimeisimpien teknologioiden hyödyntämiseen verkkosovelluksissa liittyy varjopuolia, kuten vaihteleva yhteensopivuus eri selainten ja erityisesti niiden vanhempien versioiden kanssa. Kirjoitushetkellä tässä materiaalissa hyödynnetyt selainteknologiat ovat tuettuja kaikilla moderneilla selaimilla (ks: [nuolifunktiot](https://caniuse.com/#feat=arrow-functions), [fetch](https://caniuse.com/#feat=fetch), [async/await](https://caniuse.com/#feat=async-functions), [template](https://caniuse.com/#feat=template)). 
+
+Lukiessasi tätä materiaalia tänään, voit olla huojentunut siitä, että vanhentuneiden selainversioiden käyttäjämäärät ehtivät vielä jonkin aikaa laskea ennen kuin kirjoitat tuotantokoodia suurelle yleisölle. Monissa tapauksissa nykyaikaisesti kirjoitettu koodi on myös automaattisesti käännettävissä vanhempien selainversioiden ymmärtämään muotoon esimerkiksi [Babel-kääntäjällä](https://babeljs.io/).
+
+
+### Asynkronisuus, Callback, Promise ja Async/Await
+
+Ajax-teknologioiden asynkronisuus johtuu siitä, että JavaScript suoritetaan vain yhdessä säikeessä, jossa suoritetaan kerrallaan vain yhtä lauseketta. Jos esimerkiksi tiedonsiirto tehtäisiin synkronisesti, jumittuisi koko JavaScript-sovellus siksi aikaa, kunnes tiedonsiirto valmistuu. Voit lukea lisää asynkronisesta ohjelmoinnista esimerkiksi ["Understanding Asynchronous JavaScript"](https://blog.bitsrc.io/understanding-asynchronous-javascript-the-event-loop-74cd408419ff)-artikkelista ja Mozillan ["Asynchronous JavaScript"](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous)-oppimateriaalista.
+
+Hitaiden kutsujen ongelma on ratkaistu JavaScript-maailmassa antamalla "hitaalle koodille" funktio, joka sen tulee suorittaa operaation valmistuttua. Tällaisia funktioita kutsutaan ns. callback-funktioiksi. 
+
+> Callback on oikeastaan tapahtumankäsittelijä, jonka "tapahtuma" on "palvelupyynnön valmistuminen"!
+> 
+> *Tommi Tuura, https://www.cs.helsinki.fi/u/ttuura/otk-js/asynkronisuus.html*
+
+Kun koodissa on tarpeen tehdä lukuisia perkkäisiä hitaita operaatioita, syntyy helposti syviä sisäkkäisiä rakenteita, joissa callback-funktiot kutsuvat uusia hitaita operaatioita ja antavat jälleen parametreina uusia callback-funktioita:
 
 ```javascript
 doSomething(function(result) {
@@ -96,36 +140,56 @@ doSomething(function(result) {
     }, failureCallback);
   }, failureCallback);
 }, failureCallback);
-```
-Lähde: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises
 
-Ajan saatossa asynkronisten funktioiden ohjelmointityyliksi onkin vakiintunut ns. Promise-oliot, joiden avulla useita asynkronisia kutsuja saadaan kätevästi ketjutettua:
+// source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises
+```
+
+Syvien sisäkkäisten rakenteiden välttämiseksi asynkronisten funktioiden toteutustavaksi on vakiintunut myös JavaSciptin spesifikaatioon lisätty [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)-luokka, jonka avulla useita asynkronisia kutsuja saadaan kätevästi ketjutettua. 
+
+Esimerkkikoodin `app.js`-tiedostossa peräkkäiset asynkroniset `fetch`- ja `json`-kutsut palauttavat `Promise`-oliota. `Promise`-olion tapahtumankuuntelija asetetaan kutsumalla `Promise`n `then`-metodia ja antamalla sille callback-funktio. Peräkkäisiä `Promise`-oliota voidaan myös ketjuttaa seuraavasti, jolloin ensimmäisenä `Promise`n `then`-metodille annettu funktio suoritetaan aina ennen seuraavia kutsuja:
 
 ```javascript
-doSomething()
-.then(result => doSomethingElse(result))
-.then(newResult => doThirdThing(newResult))
-.then(finalResult => {
-  console.log(`Got the final result: ${finalResult}`);
-})
-.catch(failureCallback);
+fetch("/api/shoppingList/items")
+    .then((response) => response.json())
+    .then((json) => this._items = json)
+    .then(() => this._render())
 ```
-Lähde: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises
 
-### Poikkeusten käsitteleminen asynkronisessa koodissa
+Then-kutsujen ketjuttaminen aiheuttaa kuitenkin edelleen haasteitaan koodin luettavuudelle. Sama koodi voidaan kirjoittaa yksinkertaisemmalla tavalla siten, että se hyödyntää `Promise`-toimintamallia, mutta näyttää ulkoisesti synkroniselta. Tämä tapahtuu hyödyntäen JavaScriptin `await`-avainsanaa:
 
-JavaScript 
-[Callbacks, Promises and Async/Await](https://medium.com/front-end-weekly/callbacks-promises-and-async-await-ad4756e01d90)
+```javascript
+let response = await fetch("/api/shoppingList/items");
+this._items = await response.json();
+this._render();
+```
+*[src/main/webapp/js/app.js](src/main/webapp/js/app.js)*
+
+Nykyaikaiset JavaScript-tulkit osaavat kääntää `await`-avainsanalla merkityt rivit siten, että koodi sisennetään `Promise`:n `then`-ketjuiksi automaattisesti taustalla, kunhan `await`-kutsuja sisältävän funktion määrittelyn alkuun on kirjoitettu avainsana `async`, esim seuraavasti: 
+
+```javascript
+async deleteItem(deleted) {
+    let response = await fetch(
+        `/api/shoppingList/items?id=${deleted.id}`,
+        { method: 'DELETE' }
+    );
+    this._items = this._items.filter(item => item !== deleted);
+    this._render();
+}
+```
+*[src/main/webapp/js/app.js](src/main/webapp/js/app.js)*
+
+⚠️ Mikäli kehittämääsi verkkosovellusta on tarkoitus käyttää myös vanhemmilla selainversioilla, jotka eivät osaa tulkita `await`-rakenteita, voidaan kääntäminen tehdä myös valmiiksi ennen sovelluksen julkaisua [Babel-kääntäjällä](https://babeljs.io/).
+
 
 ### JSON (JavaScript Object Notation)
 
-Tiedonsiirtomuotona selaimessa toimivan JavaScript-koodin ja palvelimella toimivan Java-koodin välillä on JSON. 
+Tiedonsiirtoformaattina tämän esimerkkisovelluksen selaimessa toimivan JavaScript-koodin ja palvelimella toimivan Java-koodin välillä on JSON. 
 
 > JSON is a text format that is completely language independent but uses conventions that are familiar to programmers of the C-family of languages, including C, C++, C#, Java, JavaScript, Perl, Python, and many others. These properties make JSON an ideal data-interchange language.
 > 
 > *https://www.json.org/json-en.html*
 
-Kun sovelluksen pääsivu `index.html` avataan, lataa JS-sovellus ostoslistan senhetkisen sisällön osoitteesta `/api/shoppingList/items`. Vastauksena selain vastaanottaa JSON-dokumentin, jonka sisältö on muodoltaan seuraavanlainen:
+Kun sovelluksen pääsivu `[index.html](src/main/webapp/index.html)` avataan, lataa JS-sovellus taustalla ostoslistan senhetkisen sisällön osoitteesta `/api/shoppingList/items`. Vastauksena selain vastaanottaa JSON-dokumentin, jonka sisältö on muodoltaan seuraavanlainen:
 
 ```json
 [
@@ -144,7 +208,7 @@ Kun sovelluksen pääsivu `index.html` avataan, lataa JS-sovellus ostoslistan se
 ]
 ```
 
-Vastaus koostuu siis taulukosta `[]`, jonka sisällä on tässä esimerkissä kolme oliota (`{}`). Kullakin oliolla on kaksi attribuuttia: `id` ja `title`, jotka ovat tyypeiltään numero ja merkkijono. Nämä vastaavat suoraan palvelinpäässä määritellyn `ShoppingListItem`-luokan oliomuuttujia:
+Vastaus koostuu siis taulukosta `[]`, jonka sisällä on tässä esimerkissä kolme oliota (`{}`). Kullakin oliolla on kaksi attribuuttia: `id` ja `title`, jotka ovat tyypeiltään numero ja merkkijono. Nämä attribuutit vastaavat suoraan palvelinpäässä määritellyn [`ShoppingListItem`](src/main/java/model/ShoppingListItem.java)-luokan oliomuuttujia:
 
 ```java
 public class ShoppingListItem {
@@ -160,11 +224,11 @@ public class ShoppingListItem {
     // ...
 }
 ```
-[`src/main/java/model/ShoppingListItem.java`](src/main/java/model/ShoppingListItem.java)
 
-JSON-tiedostomuoto sopii erinomaisesti eri ohjelmointikielien väliseen tiedonvälitykseen ja eri kielillä toteutetut oliot on muutettavissa toisen kielen olioksi parhaimmillaan automaattisesti. JSON-muunnoksia varten tässä esimerkkiprojektissa hydynnetään Googlen kehittämää [Gson-kirjastoa](https://github.com/google/gson). Gson-kirjasto ei ole osa Javan standardikirjastoa, vaan se on lisätty projektiin Maven-työkalun avulla määrittelemällä se [pom.xml](pom.xml)-tiedostoon.
+#### JavaScript ↔️ Java ↔️ JavaScript
+JSON-tiedostomuoto sopii erinomaisesti eri ohjelmointikielien väliseen tiedonvälitykseen ja eri kielillä toteutetut oliot on muutettavissa toisen kielen olioksi parhaassa tapauksessa automaattisesti. JSON-muunnoksia varten tässä esimerkkiprojektissa hydynnetään Googlen kehittämää [Gson-kirjastoa](https://github.com/google/gson). Gson-kirjasto ei ole osa Javan standardikirjastoa, vaan se on lisätty projektiin Maven-työkalun avulla määrittelemällä se [pom.xml](pom.xml)-tiedostoon.
 
-Edellä esitetty JSON-muotoinen esitys ostoslistan sisällöstä generoidaan palvelimella `ShoppingListRestServlet`-luokan `doGet`-metodissa seuraavasti:
+Edellä esitetty JSON-muotoinen esitys ostoslistan sisällöstä generoidaan palvelimella [`ShoppingListRestServlet`](src/main/java/servlet/ShoppingListRestServlet.java)-luokan `doGet`-metodissa seuraavasti:
 
 ```java
 List<ShoppingListItem> allItems = dao.getAllItems();
@@ -172,90 +236,31 @@ List<ShoppingListItem> allItems = dao.getAllItems();
 // convert the Java objects into a JSON formatted String:
 String json = new Gson().toJson(allItems);
 ```
-[`src/main/java/servlet/ShoppingListRestServlet.java`](src/main/java/servlet/ShoppingListRestServlet.java)
 
-JSON-oliot ovat valmiiksi JavaScript-kielen tukemassa muodossa, joten muunnosta ei JS-koodissa tarvitse erikseen tehdä. `fetch`-kutsun palauttama Http  response -olio antaa JSON:ia vastaavan JavaScript-olion (promiseen käärittynä) kun kutsumme sen `json()`-metodia:
+Vastaavasti samassa luokassa muodostetaan JavaScript-sovelluksen lähettämästä JSON-merkkijonosta Java-olio `doPost`-metodissa seuraavasti:
+
+```java
+// read all lines from the POST request body and join them into one String:
+String jsonString = req.getReader().lines().collect(Collectors.joining());
+
+// convert the read JSON input from a String into a ShoppingListItem object:
+ShoppingListItem newItem = new Gson().fromJson(jsonString, ShoppingListItem.class);
+
+```
+
+`Gson`-kirjasto luo yllä uuden olion automaattisesti käyttäen sille antamamme `ShoppingListItem`-luokan parametritonta konstruktoria, minkä jälkeen se asettaa JSON-rakenteessa olevat arvot olion samannimisiin muuttujiin.
+
+JavaScript-puolella palvelimen tuottamat JSON-rakenteet ovat valmiiksi kielen tukemassa muodossa, joten muunnosta ei JS-koodissa tarvitse erikseen tehdä. `fetch`-kutsun palauttama [Response-olio](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Response_objects) antaa JSON:ia vastaavan JavaScript-olion promiseen käärittynä, kun kutsumme sen `json()`-metodia:
 
 ```javascript
-try {
-    let response = await fetch("/api/shoppingList/items");
-    this._items = await response.json();
-    this._render();
-} catch (error) {
-    console.error(error)
-    alert('An error occured. Please check the consoles of the browser and the backend.')
-}
+let response = await fetch("/api/shoppingList/items");
+this._items = await response.json();
+this._render();
 ```
-*[src/main/webapp/js/app.js](src/main/webapp/js/app.js)*
-
-### XmlHttpRequest ja tapahtumankuuntelijat
-
-```javascript
-// pyyntöolion luonti
-var req = new XMLHttpRequest();
-
-// mitä tehdään kun saadaan vastaus (vastauksia voi olla useita)
-req.onreadystatechange = function() {
-    // jos tila ei ole valmis, ei käsitellä
-    if (req.readyState !== this.DONE) {
-        console.log("state " + req.readyState);
-        return false;
-    }
-
-    // jos statuskoodi ei ole 200 (ok), ei käsitellä
-    if (req.status !== 200) {
-        console.log("status " + req.status);
-        return false;
-    }
-
-    // näytetään vastaus
-    console.log(req.responseText);
-}
-
-req.open("GET", "data.json", true);
-req.send();
-```
-Koodiesimerkki: https://web-selainohjelmointi.github.io/#7-Keskustelu-palvelimen-kanssa, CC BY-NC-SA
-
-### jQuery
-
-```javascript
-$.getJSON("http://api.icndb.com/jokes/random/5",
-    function(data) {
-        $.each(data.value, function(i, item) {
-            console.log(i);
-            console.log(item);
-            console.log("-----");
-        });
-    }
-);
-```
-Koodiesimerkki: http://web-selainohjelmointi.github.io/#10.1-jQuery, CC BY-NC-SA
-
-### Fetch ja promiset
-```javascript
-fetch('https://jsonplaceholder.typicode.com/todos/1')
-  .then(response => response.json())
-  .then(json => console.log(json))
-```
-Koodiesimerkki: https://jsonplaceholder.typicode.com/
-
-### Async/await
-
-## Tämän materiaalin ohjelmointityyli ja teknologiat
-
-Tämä esimerkkiprojekti on toteutettu hyödyntäen JavaScriptin omaa `fetch`-funktiota sekä `async/await`-ohjelmointityyliä. Erillisiä kirjastoja välttämällä opit kirjoittamaan koodiasi yleisemmällä tasolla ja voit hyödyntää taitojasi myös muissa suoritusympäristöissä kuin nettiselaimessa.
-
-Aivan viimeisimpien teknologioiden hyödyntämiseen verkkosovelluksissa liittyy varjopuolia, kuten vaihteleva yhteensopivuus eri selainten ja erityisesti niiden vanhempien versioiden kanssa. Kirjoitushetkellä tässä materiaalissa hyödynnetyt selainteknologiat ovat tuettuja kaikilla moderneilla selaimilla (ks: [nuolifunktiot](https://caniuse.com/#feat=arrow-functions), [fetch](https://caniuse.com/#feat=fetch), [async/await](https://caniuse.com/#feat=async-functions), [template](https://caniuse.com/#feat=template)). 
-
-Lukiessasi tätä materiaalia tänään, voit olla helpottunut siitä, että vanhentuneiden selainversioiden käyttäjämäärät ehtivät vielä jonkin aikaa laskea ennen kuin kirjoitat tuotantokoodia suurelle yleisölle. Monissa tapauksissa nykyaikaisesti kirjoitettu koodi on myös automaattisesti käännettävissä vanhempien selainversioiden ymmärtämään muotoon esimerkiksi [Babel-kääntäjällä](https://babeljs.io/).
+*[app.js](src/main/webapp/js/app.js)*
 
 
-## Fetch
 
-https://web-selainohjelmointi.github.io/#4-JavaScript
-
-CodePen?
 
 ## Datan näyttäminen sivulla
 
@@ -264,12 +269,6 @@ https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template
 
 ### Moustache, Pug, jQuery
 
-
-CodePen?
-
-## `querySelector`
-
-https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector
 
 
 ## Osallistu tämän materiaalin kehittämiseen

@@ -2,7 +2,7 @@ package model;
 
 public class ShoppingListItem {
 
-    private int id;
+    private long id;
     private String title;
 
     /** Empty constructor only used by GSON when converting JSON to Java objects */
@@ -10,16 +10,16 @@ public class ShoppingListItem {
     private ShoppingListItem() {
     }
 
-    public ShoppingListItem(int id, String title) {
+    public ShoppingListItem(long id, String title) {
         this.id = id;
         this.title = title;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
