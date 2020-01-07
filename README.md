@@ -17,8 +17,15 @@ app.js
 
 ## Asentaminen omalle koneelle
 
-Eclipsen Git-kloonaus. Ehkä linkki: https://www.omnijava.com/2016/07/10/importing-maven-projects-from-git-into-eclipse-that-were-created-by-netbeans/
+Eclipsen Git-kloonaus. TODO: project-tiedostot? linkki: https://www.omnijava.com/2016/07/10/importing-maven-projects-from-git-into-eclipse-that-were-created-by-netbeans/
 
+Kun tiedostot on kloonattu ja projektin riippuvuudet asennettu Maven-työkalulla, voit käynnistää back end -palvelimen suorittamalla tiedoston [`src/main/java/launch/Main.java`](src/main/java/launch/Main.java). Main-luokan tarkoitus on käynnistää Tomcat-palvelin [tämän tutoriaalin](https://devcenter.heroku.com/articles/create-a-java-web-application-using-embedded-tomcat) mukaisesti ja luokan sisältöä ei tarvitse ymmärtää tämän oppimateriaalin seuraamiseksi.
+
+Kun palvelin on käynnistynyt, ota siihen yhteys selaimellasi kirjoittamalla osoiteriville http://localhost:8080.
+
+![Shopping List Demo App](documentation/assets/img/app.png)
+
+Voit nyt kokeilla tekstirivien lisäämistä sekä poistamista käyttämällä ostoslistan yläpuolista tekstikenttää sekä rivien x-painikkeita.
 
 ## Esimerkkiprojektin JavaScript-osuus
 
