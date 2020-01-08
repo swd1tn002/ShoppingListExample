@@ -4,6 +4,12 @@ Tämän projektin on tarkoitus esitellä Haaga-Helian [Ohjelmointi 2](https://op
 
 Tähän dokumenttiin sekä tässä samassa Git-repositoriossa sijaitsevaan valmiiseen koodiin perehtymällä saat peruskäsityksen yksinkertaistetun verkkosovelluksen toteuttamisesta Javalla, Servleteillä, JavaScriptillä sekä Ajax-teknologioilla. Esimerkkisovelluksesta on jätetty pois oikeassa verkkopalvelussa oleellisia ominaisuuksia, kuten käyttäjän tunnistautuminen, joiden toteuttamiseen voit perehtyä tämän esimerkin jälkeen. Voit halutessasi myös jatkokehittää tätä esimerkkisovellusta käyttämään oikeaa tietokantaa tai tukemaan useita samanaikaisia ostoslistoja.
 
+Voit tutustua palvelun toimintaan käytännössä joko asentamalla sovelluksen omalle koneellesi tai käyttämällä sen julkaistua versiota osoitteessa:
+
+https://shoppinglist-example.herokuapp.com/
+
+Herokussa toimiva versio on muokattu siten, että se näyttää kullekin käyttäjälle oman ostoslistan väärinkäytön ja häirinnän välttämiseksi. Sovellus toimii Herokussa ilmaisilla resursseilla, joten se menee usein lepotilaan. Lepotilasta herääminen kestää tovin, odota rauhassa. 
+
 ## JS-koodin yhteensopivuudesta
 
 Tässä materiaalissa hyödynnetään suhteellisen moderneja selainteknologioita, jotka eivät ole suoraan yhteensopivia vanhempien selainversioiden kanssa. Kaikkien selainvalmistajien uusimmat versiot kuitenkin tukevat käytettyjä ominaisuuksia, kuten [nuolifunktiot](https://caniuse.com/#feat=arrow-functions), [fetch](https://caniuse.com/#feat=fetch), [async/await](https://caniuse.com/#feat=async-functions) sekä [template](https://caniuse.com/#feat=template)). 
