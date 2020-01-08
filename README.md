@@ -150,9 +150,9 @@ getUser(function(user) {
 });
 ```
 
-Syvien sisäkkäisten rakenteiden välttämiseksi asynkronisten funktioiden toteutustavaksi on vakiintunut myös JavaSciptin spesifikaatioon lisätty [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)-luokka, jonka avulla useita asynkronisia kutsuja saadaan kätevästi ketjutettua. 
+Syvien sisäkkäisten rakenteiden välttämiseksi asynkronisten funktioiden toteutustavaksi on vakiintunut [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)-luokka, jonka avulla useita asynkronisia kutsuja saadaan kätevästi ketjutettua. 
 
-Esimerkkikoodin `app.js`-tiedostossa peräkkäiset asynkroniset `fetch`- ja `json`-kutsut palauttavat `Promise`-oliota. `Promise`-olion tapahtumankuuntelija asetetaan kutsumalla `Promise`n `then`-metodia ja antamalla sille callback-funktio. Peräkkäisiä `Promise`-oliota voidaan myös ketjuttaa seuraavasti, jolloin ensimmäisenä `Promise`n `then`-metodille annettu funktio suoritetaan aina ennen seuraavia kutsuja:
+Esimerkkikoodin `app.js`-tiedostossa peräkkäiset asynkroniset `fetch`- ja `json`-kutsut palauttavat `Promise`-oliota. `Promise`-olion tapahtumankuuntelija asetetaan kutsumalla `Promise`n `then`-metodia ja antamalla sille callback-funktio. Peräkkäisiä `Promise`-oliota voidaan myös ketjuttaa seuraavasti, jolloin ensimmäisenä `Promise`n `then`-metodille annettu funktio suoritetaan aina ennen seuraavia kutsuja, ja edellisen `then`-kuuntelijan palauttama arvo välitetään parametrina seuraavalle kuuntelijalle:
 
 ```javascript
 fetch("/api/shoppingList/items")
@@ -161,7 +161,7 @@ fetch("/api/shoppingList/items")
     .then(() => this._render())
 ```
 
-Then-kutsujen ketjuttaminen aiheuttaa kuitenkin edelleen haasteitaan koodin luettavuudelle. Sama koodi voidaan kirjoittaa yksinkertaisemmalla tavalla siten, että se hyödyntää `Promise`-toimintamallia, mutta näyttää ulkoisesti synkroniselta. Tämä tapahtuu hyödyntäen JavaScriptin `await`-avainsanaa:
+Then-kutsujen ketjuttaminen aiheuttaa kuitenkin edelleen haasteitaan koodin luettavuudelle. Sama koodi voidaan kirjoittaa vielä yksinkertaisemmalla tavalla siten, että se hyödyntää `Promise`-toimintamallia, mutta näyttää ulkoisesti synkroniselta. Tämä tapahtuu hyödyntäen JavaScriptin `await`-avainsanaa:
 
 ```javascript
 let response = await fetch("/api/shoppingList/items");
@@ -195,7 +195,7 @@ Tiedonsiirtoformaattina tämän esimerkkisovelluksen selaimessa toimivan JavaScr
 > 
 > *https://www.json.org/json-en.html*
 
-Kun sovelluksen pääsivu `[index.html](src/main/webapp/index.html)` avataan, lataa JS-sovellus taustalla ostoslistan senhetkisen sisällön osoitteesta `/api/shoppingList/items`. Vastauksena selain vastaanottaa JSON-dokumentin, jonka sisältö on muodoltaan seuraavan kaltainen:
+Kun sovelluksen pääsivu [`index.html`](src/main/webapp/index.html) avataan, lataa JS-sovellus taustalla ostoslistan senhetkisen sisällön osoitteesta `/api/shoppingList/items`. Vastauksena selain vastaanottaa JSON-dokumentin, jonka sisältö on muodoltaan seuraava:
 
 ```json
 [
@@ -214,9 +214,11 @@ Kun sovelluksen pääsivu `[index.html](src/main/webapp/index.html)` avataan, la
 ]
 ```
 
-Vastaus koostuu siis taulukosta `[]`, jonka sisällä on tässä esimerkissä kolme oliota (`{}`). Kullakin oliolla on kaksi attribuuttia: `id` ja `title`, jotka ovat tyypeiltään numero ja merkkijono. Nämä attribuutit vastaavat suoraan palvelinpäässä määritellyn [`ShoppingListItem`](src/main/java/model/ShoppingListItem.java)-luokan oliomuuttujia:
+Vastaus koostuu siis taulukosta `[]`, jonka sisällä on tässä esimerkissä kolme pilkulla eroteltua oliota (`{}`). Kullakin oliolla on kaksi attribuuttia: `id` ja `title`, jotka ovat tyypeiltään numero ja merkkijono. Nämä attribuutit vastaavat suoraan palvelinpäässä määritellyn [`ShoppingListItem`](src/main/java/model/ShoppingListItem.java)-Javaluokan oliomuuttujia:
 
 ```java
+package model;
+
 public class ShoppingListItem {
 
     private int id;
@@ -232,7 +234,7 @@ public class ShoppingListItem {
 ```
 
 #### JavaScript ↔️ Java ↔️ JavaScript
-JSON-tiedostomuoto sopii erinomaisesti eri ohjelmointikielien väliseen tiedonvälitykseen ja eri kielillä toteutetut oliot on muutettavissa toisen kielen olioksi parhaassa tapauksessa automaattisesti. JSON-muunnoksia varten tässä esimerkkiprojektissa hyödynnetään Googlen kehittämää [Gson-kirjastoa](https://github.com/google/gson). Gson-kirjasto ei ole osa Javan standardikirjastoa, vaan se on lisätty projektiin Maven-työkalun avulla määrittelemällä se [pom.xml](pom.xml)-tiedostoon.
+JSON-tiedostomuoto sopii erinomaisesti eri ohjelmointikielien väliseen tiedonvälitykseen ja eri kielillä toteutetut oliot on muutettavissa toisen kielen olioksi parhaassa tapauksessa automaattisesti. JSON-muunnoksia varten tässä esimerkkiprojektissa hyödynnetään Java-puolella Googlen kehittämää [Gson-kirjastoa](https://github.com/google/gson). Gson-kirjasto ei ole osa Javan standardikirjastoa, vaan se on lisätty projektiin Maven-työkalun avulla määrittelemällä se [pom.xml](pom.xml)-tiedostoon.
 
 Edellä esitetty JSON-muotoinen esitys ostoslistan sisällöstä generoidaan palvelimella [`ShoppingListRestServlet`](src/main/java/servlet/ShoppingListRestServlet.java)-luokan `doGet`-metodissa seuraavasti:
 
@@ -330,7 +332,7 @@ let app = new ShoppingListApp(container, template, form);
 </table>
 ```
 
-Dynaamisen datan renderöinnin osalta esimerkkisovellus noudattaa suurelta osin Mozillan [&lt;template&gt;: The Content Template element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template) -dokumentin esittelemää mallia.
+Dynaamisen datan renderöinnin osalta esimerkkisovellus noudattaa Mozillan [&lt;template&gt;: The Content Template element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template) -dokumentin esittelemää mallia.
 
 
 #### HTML-lomakkeen tietojen lukeminen, datan lähettäminen
@@ -349,9 +351,12 @@ form.onsubmit = () => {
     return false; // prevent reloading the page
 }
 ```
-Käsittelijä käytännössä etsii lomakkeelta ensimmäisen input-elementin ja käyttää siihen syötettyä arvoa `title`-attribuuttina luodessaan uuden JavaScript-olion. Tämän jälkeen tapahtumankäsittelijä kutsuu saman `ShoppingListItem`-olion `storeItem`-metodia, joka lähettää luodun olion palvelimelle aikaisemmin tässä materiaalissa esitellyn `fetch`-funktion avulla.
+Käsittelijä käytännössä etsii lomakkeelta ensimmäisen input-elementin (`form.querySelector("input")`) ja käyttää siihen syötettyä arvoa `title`-attribuuttina luodessaan uuden JavaScript-olion. Tämän jälkeen tapahtumankäsittelijä kutsuu saman `ShoppingListItem`-olion `storeItem`-metodia, joka lähettää luodun olion palvelimelle.
 
-🤔**Pohdittavaa:** Mikä on edellä olevan lomakkeen käsittelyn suoritusjärjestys, kun metodin keskivaiheilla oleva kutsu `storeItem`-metodiin on asynkroninen? Tyhjennetäänkö lomakkeen kenttä ennen kuin palvelinkutsu on valmistunut vai vasta sen jälkeen? Miten muutat suoritusjärjestyksen toisenlaiseksi käyttämällä `async` ja `await`-avainsanoja?
+#### 🤔 Pohdittavaa
+1. Mikä on edellä olevan lomakkeen käsittelyn suoritusjärjestys, kun metodin keskivaiheilla oleva kutsu `storeItem`-metodiin on asynkroninen? 
+2. Tyhjennetäänkö lomakkeen kenttä ennen kuin palvelinkutsu on valmistunut vai vasta sen jälkeen? 
+3. Miten muutat suoritusjärjestyksen toisenlaiseksi käyttämällä `async` ja `await`-avainsanoja?
 
 ## Osallistu tämän materiaalin kehittämiseen
 
