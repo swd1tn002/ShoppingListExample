@@ -1,17 +1,17 @@
 class ShoppingListApp {
-    REST_URL = "/api/shoppingList/items";
-    _items = [];
-
     constructor(container, itemTemplate, form) {
         console.log("initializing");
         this._container = container;
         this._itemTemplate = itemTemplate;
         this._initForm(form);
+        
+        this._restUrl = "/api/shoppingList/items"
+        this._items = []
     }
 
     async load() {
         try {
-            let response = await fetch(this.REST_URL);
+            let response = await fetch(this._restUrl);
             this._items = await response.json();
             this._render();
         } catch (error) {
@@ -44,7 +44,7 @@ class ShoppingListApp {
 
     async storeItem(newItem) {
         try {
-            let response = await fetch(this.REST_URL, {
+            let response = await fetch(this._restUrl, {
                 method: 'POST',
                 body: JSON.stringify(newItem),
                 headers: {
@@ -64,7 +64,7 @@ class ShoppingListApp {
 
     async deleteItem(deleted) {
         try {
-            let response = await fetch(this.REST_URL + `?id=${deleted.id}`, { method: 'DELETE' });
+            let response = await fetch(this._restUrl + `?id=${deleted.id}`, { method: 'DELETE' });
             this._items = this._items.filter(item => item !== deleted);
             this._render();
         } catch (error) {
