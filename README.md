@@ -4,6 +4,12 @@ Tämän projektin on tarkoitus esitellä Haaga-Helian [Ohjelmointi 2](https://op
 
 Tähän dokumenttiin sekä tässä samassa Git-repositoriossa sijaitsevaan valmiiseen koodiin perehtymällä saat peruskäsityksen yksinkertaistetun verkkosovelluksen toteuttamisesta Javalla, Servleteillä, JavaScriptillä sekä Ajax-teknologioilla. Esimerkkisovelluksesta on jätetty pois oikeassa verkkopalvelussa oleellisia ominaisuuksia, kuten käyttäjän tunnistautuminen, joiden toteuttamiseen voit perehtyä tämän esimerkin jälkeen. Voit halutessasi myös jatkokehittää tätä esimerkkisovellusta käyttämään oikeaa tietokantaa tai tukemaan useita samanaikaisia ostoslistoja.
 
+## JS-koodin yhteensopivuudesta
+
+Tässä materiaalissa hyödynnetään suhteellisen moderneja selainteknologioita, jotka eivät ole suoraan yhteensopivia vanhempien selainversioiden kanssa. Kaikkien selainvalmistajien uusimmat versiot kuitenkin tukevat käytettyjä ominaisuuksia, kuten [nuolifunktiot](https://caniuse.com/#feat=arrow-functions), [fetch](https://caniuse.com/#feat=fetch), [async/await](https://caniuse.com/#feat=async-functions) sekä [template](https://caniuse.com/#feat=template)). 
+
+Lukiessasi tätä materiaalia tänään, voit olla huojentunut siitä, että vanhentuneiden selainversioiden käyttäjämäärät ehtivät vielä jonkin aikaa laskea ennen kuin kirjoitat tuotantokoodia suurelle yleisölle. Monissa tapauksissa nykyaikaisesti kirjoitettu koodi on myös automaattisesti käännettävissä vanhempien selainversioiden ymmärtämään muotoon esimerkiksi [Babel-kääntäjällä](https://babeljs.io/).
+
 ## Sovelluksen osat
 
 ### Java-backend
@@ -46,22 +52,22 @@ Kun projekti on "kloonattu" ja Maven-työkalu on asentanut sen riippuvuudet, voi
 
 Kun palvelin on käynnistynyt, ota siihen yhteys selaimellasi kirjoittamalla osoiteriville http://localhost:8080.
 
-![Shopping List Demo App](documentation/assets/img/app.png)
+<img src="documentation/assets/img/app.png" alt="Shopping List Demo App" style="max-width: 300px;"/>
 
-Voit nyt kokeilla tekstirivien lisäämistä sekä poistamista käyttämällä ostoslistan yläpuolista tekstikenttää sekä rivien x-painikkeita.
+Voit nyt kokeilla tekstirivien lisäämistä sekä poistamista käyttämällä ostoslistan yläpuolista tekstikenttää sekä rivien [&times;]-painikkeita.
 
 
 ## Esimerkkiprojektin JavaScript-osuus
 
 Tässä esimerkkisovelluksessa ja siihen liittyvässä dokumentaatiossa oletetaan sekä JavaScript-kielen että siihen liittyvien kehitysympäristöjen olevan lukijalle jo jokseenkin tuttuja.
 
-Esimerkki on pyritty rakentamaan siten, että siinä noudatetaan yleisesti hyviksi todettuja käytäntöjä esimerkiksi koodin nimeämisessä sekä jäsentämisessä luokkiin ja metodeihin. Ero ohjelmointityylissä onkin pyritty tekemään mahdollisimman pieneksisovellettujen Java- ja JavaScript käytäntöjen välillä.
+Esimerkki on pyritty rakentamaan siten, että siinä noudatetaan yleisesti hyviksi todettuja käytäntöjä esimerkiksi koodin nimeämisessä sekä jäsentämisessä luokkiin ja metodeihin. Ero ohjelmointityylissä onkin pyritty tekemään mahdollisimman pieneksi sovellettujen Java- ja JavaScript käytäntöjen välillä.
 
 JavaScript-koodissa ohjelman rakenne saattaa usein muuttua melkoiseksi spagetiksi, jossa yksittäiset metodit pitävät sisällään niin tietoliikenteeseen kuin HTML-rakenteen käsittelyyn liittyviä toimenpiteitä. Tässä esimerkissä pyritään jakamaan ohjelma tarkasti erillisiin osiin, vaikka se yksittäisiä esimerkkejä hieman monimutkaistaisikin.
 
-### Nuolifunktiot
+### Pakolliset nuolifunktiot
 
-JavaScript-sovelluksen ([src/main/webapp/js/app.js](src/main/webapp/js/app.js)) lähdekoodissa esiintyy JavaScript-maailmassa yleistyviä nuolifunktioita, esim: `(a, b) => a + b`. Tämä nuolifunktio olisi  lyhyempi syntaksi perinteisille anonyymeille funktioille:
+JavaScript-sovelluksen ([src/main/webapp/js/app.js](src/main/webapp/js/app.js)) lähdekoodissa esiintyy JavaScript-maailmassa yleistyviä nuolifunktioita, esimerkiksi `(a, b) => a + b`. Tämä nuolifunktio olisi  lyhyempi syntaksi perinteisille anonyymeille funktioille:
 
 ```javascript
 function(a, b) {
@@ -115,10 +121,6 @@ Tämän esimerkkiprojektin tiedonsiirto on toteutettu hyödyntäen JavaScriptin 
 
 Erillisiä kirjastoja välttämällä opit kirjoittamaan koodiasi yleisemmällä tasolla ja voit hyödyntää taitojasi myös nettisivujen ulkopuolella, esimerkiksi Node.js-sovelluksissa ja mobiilisovelluksissa.
 
-Aivan viimeisimpien teknologioiden hyödyntämiseen verkkosovelluksissa liittyy varjopuolia, kuten vaihteleva yhteensopivuus eri selainten ja erityisesti niiden vanhempien versioiden kanssa. Kirjoitushetkellä tässä materiaalissa hyödynnetyt selainteknologiat ovat tuettuja kaikilla moderneilla selaimilla (ks: [nuolifunktiot](https://caniuse.com/#feat=arrow-functions), [fetch](https://caniuse.com/#feat=fetch), [async/await](https://caniuse.com/#feat=async-functions), [template](https://caniuse.com/#feat=template)). 
-
-Lukiessasi tätä materiaalia tänään, voit olla huojentunut siitä, että vanhentuneiden selainversioiden käyttäjämäärät ehtivät vielä jonkin aikaa laskea ennen kuin kirjoitat tuotantokoodia suurelle yleisölle. Monissa tapauksissa nykyaikaisesti kirjoitettu koodi on myös automaattisesti käännettävissä vanhempien selainversioiden ymmärtämään muotoon esimerkiksi [Babel-kääntäjällä](https://babeljs.io/).
-
 
 ### Asynkronisuus, Callbackit, Promiset ja Async/Await
 
@@ -130,7 +132,7 @@ Hitaiden kutsujen ongelma on ratkaistu JavaScript-maailmassa antamalla "hitaalle
 > 
 > *Tommi Tuura, https://www.cs.helsinki.fi/u/ttuura/otk-js/asynkronisuus.html*
 
-Kun koodissa on tarpeen tehdä lukuisia perkkäisiä hitaita operaatioita, syntyy helposti syviä sisäkkäisiä rakenteita, joissa callback-funktiot kutsuvat uusia hitaita operaatioita ja antavat jälleen parametreina uusia callback-funktioita:
+Kun koodissa on tarpeen tehdä lukuisia peräkkäisiä hitaita operaatioita, syntyy helposti syviä sisäkkäisiä rakenteita, joissa callback-funktiot kutsuvat uusia hitaita operaatioita ja antavat jälleen parametreina uusia callback-funktioita:
 
 ```javascript
 getUser(function(user) {
@@ -187,7 +189,7 @@ Tiedonsiirtoformaattina tämän esimerkkisovelluksen selaimessa toimivan JavaScr
 > 
 > *https://www.json.org/json-en.html*
 
-Kun sovelluksen pääsivu `[index.html](src/main/webapp/index.html)` avataan, lataa JS-sovellus taustalla ostoslistan senhetkisen sisällön osoitteesta `/api/shoppingList/items`. Vastauksena selain vastaanottaa JSON-dokumentin, jonka sisältö on muodoltaan seuraavanlainen:
+Kun sovelluksen pääsivu `[index.html](src/main/webapp/index.html)` avataan, lataa JS-sovellus taustalla ostoslistan senhetkisen sisällön osoitteesta `/api/shoppingList/items`. Vastauksena selain vastaanottaa JSON-dokumentin, jonka sisältö on muodoltaan seuraavan kaltainen:
 
 ```json
 [
@@ -224,7 +226,7 @@ public class ShoppingListItem {
 ```
 
 #### JavaScript ↔️ Java ↔️ JavaScript
-JSON-tiedostomuoto sopii erinomaisesti eri ohjelmointikielien väliseen tiedonvälitykseen ja eri kielillä toteutetut oliot on muutettavissa toisen kielen olioksi parhaassa tapauksessa automaattisesti. JSON-muunnoksia varten tässä esimerkkiprojektissa hydynnetään Googlen kehittämää [Gson-kirjastoa](https://github.com/google/gson). Gson-kirjasto ei ole osa Javan standardikirjastoa, vaan se on lisätty projektiin Maven-työkalun avulla määrittelemällä se [pom.xml](pom.xml)-tiedostoon.
+JSON-tiedostomuoto sopii erinomaisesti eri ohjelmointikielien väliseen tiedonvälitykseen ja eri kielillä toteutetut oliot on muutettavissa toisen kielen olioksi parhaassa tapauksessa automaattisesti. JSON-muunnoksia varten tässä esimerkkiprojektissa hyödynnetään Googlen kehittämää [Gson-kirjastoa](https://github.com/google/gson). Gson-kirjasto ei ole osa Javan standardikirjastoa, vaan se on lisätty projektiin Maven-työkalun avulla määrittelemällä se [pom.xml](pom.xml)-tiedostoon.
 
 Edellä esitetty JSON-muotoinen esitys ostoslistan sisällöstä generoidaan palvelimella [`ShoppingListRestServlet`](src/main/java/servlet/ShoppingListRestServlet.java)-luokan `doGet`-metodissa seuraavasti:
 
