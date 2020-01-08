@@ -5,7 +5,10 @@ public class ShoppingListItem {
     private long id;
     private String title;
 
-    /** Empty constructor only used by GSON when converting JSON to Java objects */
+    /**
+     * Empty constructor only used by Gson when converting JSON Stringsto Java
+     * objects. Set to private to prevent creating uninitialized objects.
+     */
     @SuppressWarnings("unused")
     private ShoppingListItem() {
     }

@@ -27,7 +27,7 @@ public class ShoppingListRestServlet extends HttpServlet {
         // convert the Java objects into a JSON formatted String:
         String json = new Gson().toJson(allItems);
 
-        resp.setContentType("application/json;charset=UTF-8");
+        resp.setContentType("application/json; charset=UTF-8");
         resp.getWriter().println(json);
     }
 
@@ -44,7 +44,7 @@ public class ShoppingListRestServlet extends HttpServlet {
 
         String json = new Gson().toJson(newItem);
 
-        resp.setContentType("application/json;charset=UTF-8");
+        resp.setContentType("application/json; charset=UTF-8");
         resp.getWriter().println(json);
     }
 
@@ -60,7 +60,7 @@ public class ShoppingListRestServlet extends HttpServlet {
 
         String json = new Gson().toJson(item);
 
-        resp.setContentType("application/json;charset=UTF-8");
+        resp.setContentType("application/json; charset=UTF-8");
         resp.getWriter().println(json);
     }
 }

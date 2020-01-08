@@ -54,9 +54,11 @@ class ShoppingListApp {
             let json = await response.json();
             this._items.push(json);
             this._render();
+            return true;
         } catch (error) {
             console.error(error)
             alert('An error occured. Please check the consoles of the browser and the backend.')
+            return false;
         }
     }
 

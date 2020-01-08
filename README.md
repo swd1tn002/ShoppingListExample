@@ -1,8 +1,8 @@
 # Shopping List -esimerkkisovellus
 
-Tämän projektin on tarkoitus esitellä Haaga-Helian [Ohjelmointi 2](https://opinto-opas.haaga-helia.fi/course_unit/SWD4TN033) -opintojaksolla opeteltavia web-teknologioita käytännössä.
+Tämän projektin on tarkoitus esitellä Haaga-Helian [Ohjelmointi 2](https://opinto-opas.haaga-helia.fi/course_unit/SWD4TN033) -opintojaksolla käsiteltäviä web-teknologioita käytännössä.
 
-Tähän dokumentaatioon sekä tässä samassa Git-repositoriossa sijaitsevaan valmiiseen koodiin perehtymällä saat peruskäsityksen yksinkertaistetun verkkosovelluksen toteuttamisesta Javalla, Servleteillä, JavaScriptillä sekä Ajax-teknologioilla. Esimerkkisovelluksesta on jätetty pois oikeassa verkkopalvelussa oleellisia ominaisuuksia, kuten käyttäjän tunnistautuminen, joiden toteuttamiseen voit perehtyä tämän esimerkin jälkeen. Voit halutessasi myös jatkokehittää tätä esimerkkisovellusta hyödyntämään oikeaa tietokantaa tai tukemaan useita samanaikaisia ostoslistoja.
+Tähän dokumenttiin sekä tässä samassa Git-repositoriossa sijaitsevaan valmiiseen koodiin perehtymällä saat peruskäsityksen yksinkertaistetun verkkosovelluksen toteuttamisesta Javalla, Servleteillä, JavaScriptillä sekä Ajax-teknologioilla. Esimerkkisovelluksesta on jätetty pois oikeassa verkkopalvelussa oleellisia ominaisuuksia, kuten käyttäjän tunnistautuminen, joiden toteuttamiseen voit perehtyä tämän esimerkin jälkeen. Voit halutessasi myös jatkokehittää tätä esimerkkisovellusta käyttämään oikeaa tietokantaa tai tukemaan useita samanaikaisia ostoslistoja.
 
 ## Sovelluksen osat
 
@@ -25,15 +25,15 @@ Esimerkkisovelluksen Java-osuus koostuu kolmesta luokasta sekä palvelimen käyn
 
 Servlet-pohjaiset sovellukset tarvitsevat aina jonkin suoritusympäristön, joka tällä esimerkkiprojektilla on nimeltään Tomcat. Tomcat ja muut sovelluksen riippuvuudet on helpointa asentaa Maven-työkalua käyttäen, jota varten projektista löytyy valmis "Project Object Model"-tiedosto eli [pom.xml](pom.xml).
 
-Maven-projekti on rakennettu noudattaen Heroku-pilvialustan esimerkkiä ("Create a Java Web Application Using Embedded Tomcat")[https://devcenter.heroku.com/articles/create-a-java-web-application-using-embedded-tomcat].
+Maven-projekti on rakennettu noudattaen Heroku-pilvialustan esimerkkiä ["Create a Java Web Application Using Embedded Tomcat"](https://devcenter.heroku.com/articles/create-a-java-web-application-using-embedded-tomcat).
 
 ### JavaScript front-end
 
 Sovelluksen selainkäyttöliittymä koostuu kahdesta tiedostosta:
 
-[app.js](src/main/webapp/js/app.js) sisältää kaiken JavaScript-toimintalogiikan `ShoppingListApp`-nimisessä luokassa. Luokan avulla on mahdollista näyttää kaikki ostoslistan rivit sekä lisätä ja poistaa rivejä yksi kerrallaan.
+* [app.js](src/main/webapp/js/app.js) sisältää kaiken JavaScript-toimintalogiikan `ShoppingListApp`-nimisessä luokassa. Luokan avulla on mahdollista näyttää kaikki ostoslistan rivit sekä lisätä ja poistaa rivejä yksi kerrallaan.
 
-[index.html](src/main/webapp/index.html) sisältää sivun sovelluksen tarvitseman käyttöliittymän, joka koostuu rivien lisäämiseen käytettävästä lomakkeesta, ostoslistan esittävästä HTML-taulukosta sekä selaimessa näkymättömäksi jäävästä `template`-pohjasta, jota hyödynnetään JavaScript-puolella uusien ostoslistarivien renderöimiseksi.
+* [index.html](src/main/webapp/index.html) sisältää sivun sovelluksen tarvitseman käyttöliittymän, joka koostuu rivien lisäämiseen käytettävästä lomakkeesta, ostoslistan esittävästä HTML-taulukosta sekä selaimessa näkymättömäksi jäävästä `template`-pohjasta, jota hyödynnetään JavaScript-puolella uusien ostoslistarivien renderöimiseksi.
 
 Lisäksi sovelluksessa hyödynnetään [Sakura](https://unpkg.com/sakura.css/css/sakura.css)-nimistä avoimen lähdekoodin CSS-kirjastoa, joka valikoitui sovellukseen siksi, että se ei vaadi lainkaan luokkien tai id-attribuuttien määrittelemistä sivun HTML-rakenteeseen.
 
@@ -104,7 +104,7 @@ Alemmassa nuolifunktiolla toteutetussa versiossa
 
 ### Ajax
 
-Termi "Ajax" on lyhenne sanoista "Asynchronous JavaScript and XML". Nykyään tiedostonsiirtoon käytetään XML-formaatin sijaan yksinkertaisempaa JSON-formaattia. 
+Termi "Ajax" on lyhenne sanoista "Asynchronous JavaScript and XML". Nykyään tiedostonsiirtoon käytetään usein XML-formaatin sijaan yksinkertaisempaa JSON-formaattia. 
 
 Ajax-teknologioita hyödynnetään tässä projektissa ostoslistan sisällön päivittämisessä dynaamisesti siten, että selain hakee taustalla dataa palvelimelta ja näyttää sen ilman erillistä sivulatausta. Vastaavasti tietojen lisääminen ja poistaminen eivät edellytä sivulatausta, vaan tieto siirtyy taustalla ja päivittyy sivulle dynaamisesti.
 
@@ -120,7 +120,7 @@ Aivan viimeisimpien teknologioiden hyödyntämiseen verkkosovelluksissa liittyy 
 Lukiessasi tätä materiaalia tänään, voit olla huojentunut siitä, että vanhentuneiden selainversioiden käyttäjämäärät ehtivät vielä jonkin aikaa laskea ennen kuin kirjoitat tuotantokoodia suurelle yleisölle. Monissa tapauksissa nykyaikaisesti kirjoitettu koodi on myös automaattisesti käännettävissä vanhempien selainversioiden ymmärtämään muotoon esimerkiksi [Babel-kääntäjällä](https://babeljs.io/).
 
 
-### Asynkronisuus, Callback, Promise ja Async/Await
+### Asynkronisuus, Callbackit, Promiset ja Async/Await
 
 Ajax-teknologioiden asynkronisuus johtuu siitä, että JavaScript suoritetaan vain yhdessä säikeessä, jossa suoritetaan kerrallaan vain yhtä lauseketta. Jos esimerkiksi tiedonsiirto tehtäisiin synkronisesti, jumittuisi koko JavaScript-sovellus siksi aikaa, kunnes tiedonsiirto valmistuu. Voit lukea lisää asynkronisesta ohjelmoinnista esimerkiksi ["Understanding Asynchronous JavaScript"](https://blog.bitsrc.io/understanding-asynchronous-javascript-the-event-loop-74cd408419ff)-artikkelista ja Mozillan ["Asynchronous JavaScript"](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous)-oppimateriaalista.
 
@@ -133,15 +133,13 @@ Hitaiden kutsujen ongelma on ratkaistu JavaScript-maailmassa antamalla "hitaalle
 Kun koodissa on tarpeen tehdä lukuisia perkkäisiä hitaita operaatioita, syntyy helposti syviä sisäkkäisiä rakenteita, joissa callback-funktiot kutsuvat uusia hitaita operaatioita ja antavat jälleen parametreina uusia callback-funktioita:
 
 ```javascript
-doSomething(function(result) {
-  doSomethingElse(result, function(newResult) {
-    doThirdThing(newResult, function(finalResult) {
-      console.log('Got the final result: ' + finalResult);
-    }, failureCallback);
-  }, failureCallback);
-}, failureCallback);
-
-// source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises
+getUser(function(user) {
+  getShoppingList(user, function(shoppingList) {
+    getListItems(shoppingList, function(listItems)) {
+      renderItems(listItems);
+    });
+  });
+});
 ```
 
 Syvien sisäkkäisten rakenteiden välttämiseksi asynkronisten funktioiden toteutustavaksi on vakiintunut myös JavaSciptin spesifikaatioon lisätty [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)-luokka, jonka avulla useita asynkronisia kutsuja saadaan kätevästi ketjutettua. 
@@ -245,35 +243,111 @@ String jsonString = req.getReader().lines().collect(Collectors.joining());
 
 // convert the read JSON input from a String into a ShoppingListItem object:
 ShoppingListItem newItem = new Gson().fromJson(jsonString, ShoppingListItem.class);
-
 ```
 
 `Gson`-kirjasto luo yllä uuden olion automaattisesti käyttäen sille antamamme `ShoppingListItem`-luokan parametritonta konstruktoria, minkä jälkeen se asettaa JSON-rakenteessa olevat arvot olion samannimisiin muuttujiin.
 
-JavaScript-puolella palvelimen tuottamat JSON-rakenteet ovat valmiiksi kielen tukemassa muodossa, joten muunnosta ei JS-koodissa tarvitse erikseen tehdä. `fetch`-kutsun palauttama [Response-olio](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Response_objects) antaa JSON:ia vastaavan JavaScript-olion promiseen käärittynä, kun kutsumme sen `json()`-metodia:
+Koska servlettimme tuottaa tässä tapauksessa JSON-muotoista dataa, emme käytä tulosten muodostamisessa JSP-sivuja tai muita sivupohjia. Sen sijaan tulos kirjoitetaan HTTP-pyynnön vastaukseen `HttpServletResponse`-olion `getWriter`-metodin ja sen palauttaman `PrintWriter`-tulostimen avulla. Selaimelle on myös syytä kertoa minkä tyyppistä dataa vastaus sisältää. Tämä tapahtuu asettamalla `Content-Type` -niminen HTTP-headeri `setContentType`-metodilla. JSON-tiedostomuodon MIME-tyyppi on `application/json`, minkä lisäksi määrittelemme merkistöksi `UTF-8`:
+
+```java
+@Override
+protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    List<ShoppingListItem> allItems = dao.getAllItems();
+
+    // convert the Java objects into a JSON formatted String:
+    String json = new Gson().toJson(allItems);
+
+    resp.setContentType("application/json; charset=UTF-8");
+    resp.getWriter().println(json);
+}
+```
+
+JavaScript-puolella palvelimen tuottamat JSON-rakenteet ovat valmiiksi kielen tukemassa muodossa, joten muunnosta ei JS-koodissa tarvitse erikseen tehdä. `fetch`-kutsun palauttama [Response-olio](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Response_objects) antaa JSON:ia vastaavan JavaScript-olion promiseen käärittynä, kun kutsumme sen `json()`-metodia (katso [app.js](src/main/webapp/js/app.js)):
 
 ```javascript
 let response = await fetch("/api/shoppingList/items");
 this._items = await response.json();
 this._render();
 ```
-*[app.js](src/main/webapp/js/app.js)*
 
+## Dynaamisesti haetun datan näyttäminen sivulla
 
+Kun data on haettu Ajax:in avulla palvelimelta, se halutaan vielä näyttää sivulla. Kuten aina, myös sivun dynaamiselle päivittämiselle on olemassa erilaisia lähestymistapoja ja valmiita kirjastoja. Tässä esimerkissä hyödynnetään myös käyttöliittymäkerroksessa HTML:n ja JavaScriptin natiiviominaisuuksia.
 
-
-## Datan näyttäminen sivulla
+[Separation of concerns](https://www.google.com/search?q=Separation+of+concerns) -suunnitteluperiaatteen mukaisesti esimerkki on pyritty toteuttamaan niin, että JavaScript-puolella ei oteta kantaa sivun rakenteeseen eikä HTML-koodissa esiinny toimintalogiikkaan liittyviä ominaisuuksia, kuten tapahtumankuuntelijoita. Yksi ratkaisun hyödyistä on se, että sovellus voitaisiin muuttaa  käyttämään taulukkoelementtien sijasta esimerkiksi listoja muuttamalla pelkästään HTML-koodia: JavaScript-puolella ei tehdä olettamuksia sivun tai sille lisättävien elementtien tyypeistä.
 
 ### `<template>`-tagi
-https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template
 
-### Moustache, Pug, jQuery
+> The HTML Content Template (`<template>`) element is a mechanism for holding HTML that is not to be rendered immediately when a page is loaded but may be instantiated subsequently during runtime using JavaScript.
+>
+> https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template
+
+Tässä sovelluksessa dynaamisesti lisättävät elementit, eli ostoslistan tuoterivit tuotenimineen ja poistopainikkeineen on määritetty `index.html`-sivulle template-tagin sisään:
+
+```javascript
+<template id="list-item-template">
+    <tr>
+        <td class="title"></td>
+        <td><button class="remove">&times;</button></td>
+    </tr>
+</template>
+```
+
+Template-elementti haetaan JavaScript-koodissa `index.html`-tiedostossa, josta se annetaan konstruktoriparametrina `ShoppingListApp`-oliolle: 
+
+```javascript
+let container = document.querySelector("#list-items");
+let template = document.querySelector("#list-item-template"); 
+// ...  
+let app = new ShoppingListApp(container, template, form);
+```
+
+`ShoppingListApp` käyttää saamaansa templatea lisätessään ostoslistan rivit sivulla valmiiksi olevaan `<tbody>`-elementtiin. Yllä olevassa konstruktorikutsussa annetaan parametrina `container`, joka viittaa sivulla olevan `<table>`-elementin `<tbody id="list-items">`-lapsielementtiin:
+
+```html
+<table>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="list-items">
+        <!--
+            Table rows (shopping list items) are inserted here
+            dynamically by using JavaScript and the template#list-item-template
+            tag below. 
+        -->
+    </tbody>
+</table>
+```
+
+Dynaamisen datan renderöinnin osalta esimerkkisovellus noudattaa suurelta osin Mozillan [&lt;template&gt;: The Content Template element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template) -dokumentin esittelemää mallia.
 
 
+#### HTML-lomakkeen tietojen lukeminen, datan lähettäminen
+
+Uuden `ShoppingListItem`-olion luomista varten JavaScript-koodissa asetetaan `onsubmit`-käsittelijä lomakkeelle, jossa on tekstikenttä ja "lähetä"-painike (katso [app.js](src/main/webapp/js/app.js)):
+
+```javascript
+form.onsubmit = () => {
+    let input = form.querySelector("input");
+    let newItem = {
+        title: input.value
+    };
+    this.storeItem(newItem);
+
+    input.value = ""; // clear contents of input field after saving
+    return false; // prevent reloading the page
+}
+```
+Käsittelijä käytännössä etsii lomakkeelta ensimmäisen input-elementin ja käyttää siihen syötettyä arvoa `title`-attribuuttina luodessaan uuden JavaScript-olion. Tämän jälkeen tapahtumankäsittelijä kutsuu saman `ShoppingListItem`-olion `storeItem`-metodia, joka lähettää luodun olion palvelimelle aikaisemmin tässä materiaalissa esitellyn `fetch`-funktion avulla.
+
+🤔**Pohdittavaa:** Mikä on edellä olevan lomakkeen käsittelyn suoritusjärjestys, kun metodin keskivaiheilla oleva kutsu `storeItem`-metodiin on asynkroninen? Tyhjennetäänkö lomakkeen kenttä ennen kuin palvelinkutsu on valmistunut vai vasta sen jälkeen? Miten muutat suoritusjärjestyksen toisenlaiseksi käyttämällä `async` ja `await`-avainsanoja?
 
 ## Osallistu tämän materiaalin kehittämiseen
 
-Tämä dokumentaatio on kirjoitettu [markdown](https://guides.github.com/features/mastering-markdown/)-syntaksilla ja sitä ylläpidetään ohjelmistokehittäjien parissa erittäin suositussa GitHub-palvelussa. Voit [esittää kysymyksiä ja kehitysideoita]() sekä tehdä [muutosehdotuksia materiaaliin sekä palvelun lähdekoodeihin]() GitHubissa.
+Tämä dokumentaatio on kirjoitettu [markdown](https://guides.github.com/features/mastering-markdown/)-syntaksilla ja sitä ylläpidetään ohjelmistokehittäjien parissa erittäin suositussa GitHub-palvelussa. Voit [esittää kysymyksiä ja kehitysideoita](issues/) sekä tehdä [muutosehdotuksia materiaaliin sekä palvelun lähdekoodeihin](pulls/) GitHubissa.
 
 ## Lisenssi
 
