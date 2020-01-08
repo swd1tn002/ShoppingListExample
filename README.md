@@ -12,7 +12,7 @@ Herokussa toimiva versio on muokattu siten, että se näyttää kullekin käytt�
 
 ## JS-koodin yhteensopivuudesta
 
-Tässä materiaalissa hyödynnetään suhteellisen moderneja selainteknologioita, jotka eivät ole suoraan yhteensopivia vanhempien selainversioiden kanssa. Kaikkien selainvalmistajien uusimmat versiot kuitenkin tukevat käytettyjä ominaisuuksia, kuten [nuolifunktiot](https://caniuse.com/#feat=arrow-functions), [fetch](https://caniuse.com/#feat=fetch), [async/await](https://caniuse.com/#feat=async-functions) sekä [template](https://caniuse.com/#feat=template)). 
+Tässä materiaalissa hyödynnetään suhteellisen moderneja selainteknologioita, jotka eivät ole suoraan yhteensopivia vanhempien selainversioiden kanssa. Kaikkien selainvalmistajien uusimmat versiot kuitenkin tukevat käytettyjä ominaisuuksia, kuten [nuolifunktiot](https://caniuse.com/#feat=arrow-functions), [fetch](https://caniuse.com/#feat=fetch), [async/await](https://caniuse.com/#feat=async-functions) sekä [template](https://caniuse.com/#feat=template). 
 
 Lukiessasi tätä materiaalia tänään, voit olla huojentunut siitä, että vanhentuneiden selainversioiden käyttäjämäärät ehtivät vielä jonkin aikaa laskea ennen kuin kirjoitat tuotantokoodia suurelle yleisölle. Monissa tapauksissa nykyaikaisesti kirjoitettu koodi on myös automaattisesti käännettävissä vanhempien selainversioiden ymmärtämään muotoon esimerkiksi [Babel-kääntäjällä](https://babeljs.io/).
 
