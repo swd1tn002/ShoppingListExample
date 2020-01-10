@@ -249,10 +249,10 @@ Vastaavasti samassa luokassa muodostetaan JavaScript-sovelluksen l채hett채m채st�
 
 ```java
 // read all lines from the POST request body and join them into one String:
-String jsonString = req.getReader().lines().collect(Collectors.joining());
+String jsonInput = req.getReader().lines().collect(Collectors.joining());
 
 // convert the read JSON input from a String into a ShoppingListItem object:
-ShoppingListItem newItem = new Gson().fromJson(jsonString, ShoppingListItem.class);
+ShoppingListItem newItem = new Gson().fromJson(jsonInput, ShoppingListItem.class);
 ```
 
 `Gson`-kirjasto luo yll채 uuden olion automaattisesti k채ytt채en sille antamamme `ShoppingListItem`-luokan parametritonta konstruktoria, mink채 j채lkeen se asettaa JSON-rakenteessa olevat arvot olion samannimisiin muuttujiin.

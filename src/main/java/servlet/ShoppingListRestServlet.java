@@ -35,17 +35,17 @@ public class ShoppingListRestServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
         // read all lines from the POST request body and join them into one String:
-        String jsonString = req.getReader().lines().collect(Collectors.joining());
+        String jsonInput = req.getReader().lines().collect(Collectors.joining());
 
         // convert the read JSON input from a String into a ShoppingListItem object:
-        ShoppingListItem newItem = new Gson().fromJson(jsonString, ShoppingListItem.class);
+        ShoppingListItem newItem = new Gson().fromJson(jsonInput, ShoppingListItem.class);
 
-        dao.addItem(newItem);
+        ShoppingListItem created = dao.addItem(newItem);
 
-        String json = new Gson().toJson(newItem);
+        String jsonOutput = new Gson().toJson(created);
 
         resp.setContentType("application/json; charset=UTF-8");
-        resp.getWriter().println(json);
+        resp.getWriter().println(jsonOutput);
     }
 
     @Override

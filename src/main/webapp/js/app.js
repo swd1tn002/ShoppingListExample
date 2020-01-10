@@ -1,12 +1,11 @@
 class ShoppingListApp {
     constructor(container, itemTemplate, form) {
-        console.log("initializing");
         this._container = container;
         this._itemTemplate = itemTemplate;
         this._initForm(form);
         
-        this._restUrl = "/api/shoppingList/items"
-        this._items = []
+        this._restUrl = '/api/shoppingList/items';
+        this._items = [];
     }
 
     async load() {
@@ -15,8 +14,8 @@ class ShoppingListApp {
             this._items = await response.json();
             this._render();
         } catch (error) {
-            console.error(error)
-            alert('An error occured. Please check the consoles of the browser and the backend.')
+            console.error(error);
+            alert('An error occured. Please check the consoles of the browser and the backend.');
         }
     }
 
@@ -31,9 +30,9 @@ class ShoppingListApp {
     _renderItem(item) {
         // Make a copy of the template (true to make a deep copy)
         let newNode = document.importNode(this._itemTemplate.content, true);
-        let removeButton = newNode.querySelector(".remove");
+        let removeButton = newNode.querySelector('.remove');
 
-        newNode.querySelector(".title").innerText = item.title;
+        newNode.querySelector('.title').innerText = item.title;
 
         removeButton.onclick = () => {
             this.deleteItem(item);
@@ -48,7 +47,7 @@ class ShoppingListApp {
                 method: 'POST',
                 body: JSON.stringify(newItem),
                 headers: {
-                    "Content-type": "application/json; charset=UTF-8"
+                    'Content-type': 'application/json; charset=UTF-8'
                 }
             });
             let json = await response.json();
@@ -56,8 +55,8 @@ class ShoppingListApp {
             this._render();
             return true;
         } catch (error) {
-            console.error(error)
-            alert('An error occured. Please check the consoles of the browser and the backend.')
+            console.error(error);
+            alert('An error occured. Please check the consoles of the browser and the backend.');
             return false;
         }
     }
@@ -68,8 +67,8 @@ class ShoppingListApp {
             this._items = this._items.filter(item => item !== deleted);
             this._render();
         } catch (error) {
-            console.error(error)
-            alert('An error occured. Please check the consoles of the browser and the backend.')
+            console.error(error);
+            alert('An error occured. Please check the consoles of the browser and the backend.');
         }
     }
 

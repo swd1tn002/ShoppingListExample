@@ -20,6 +20,7 @@ public class ShoppingListItemDao {
     private int nextId = 1; // to provide each item an unique incrementing id
 
     public ShoppingListItemDao() {
+        // Add a few initial values to start with:
         items.add(new ShoppingListItem(nextId++, "Milk"));
         items.add(new ShoppingListItem(nextId++, "Eggs"));
         items.add(new ShoppingListItem(nextId++, "Bread"));
