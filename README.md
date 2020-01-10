@@ -120,6 +120,12 @@ Termi "Ajax" on lyhenne sanoista "Asynchronous JavaScript and XML". Nykyään ti
 
 Ajax-teknologioita hyödynnetään tässä projektissa ostoslistan sisällön päivittämisessä dynaamisesti siten, että selain hakee taustalla dataa palvelimelta ja näyttää sen ilman erillistä sivulatausta. Vastaavasti tietojen lisääminen ja poistaminen eivät edellytä sivulatausta, vaan tieto siirtyy taustalla ja päivittyy sivulle dynaamisesti.
 
+#### Mobiilisovellukset, integraatiorajapinnat...
+
+Sivulatausten välttämisen lisäksi toinen, jopa merkittävämpi hyöty tässä esimerkissä käyttämillämme teknologioilla on se, että palvelimella oleva koodi ja selaimessa suoritettava koodi ovat toisistaan riippuvaisia vain standardin JSON-muotoisen tiedonsiirron osalta. 
+
+Tämä mahdollistaa sen, että myös uusia asiakasohjelmia, kuten mobiilisovelluksia, voidaan toteuttaa täysin saman palvelinohjelmiston päälle. **Tässä esimerkissä käytettyä Java-palvelinsovellusta voitaisiinkin käyttää aivan yhtä hyvin esimerkiksi mobiilisovelluksen taustajärjestelmänä täysin samoja HTTP-kutsuja ja JSON-rakenteita hyödyntäen**. Mobiilisovellus ja Ajax-pohjainen verkkosivu voivat myös elää rinnakkain saman taustajärjestelmän kanssa, kuten hyvin monet sivut ja sovellukset nykyään tekevätkin. 
+
 
 #### Fetch, jQuery, XMLHttpRequest...
 
