@@ -37,7 +37,9 @@ Esimerkkisovelluksen Java-osuus koostuu kolmesta luokasta sekä palvelimen käyn
 
 Servlet-pohjaiset sovellukset tarvitsevat aina jonkin suoritusympäristön, joka tällä esimerkkiprojektilla on nimeltään Tomcat. Tomcat ja muut sovelluksen riippuvuudet on helpointa asentaa Maven-työkalua käyttäen, jota varten projektista löytyy valmis "Project Object Model"-tiedosto eli [pom.xml](pom.xml).
 
-Maven-projekti on rakennettu noudattaen Heroku-pilvialustan esimerkkiä ["Create a Java Web Application Using Embedded Tomcat"](https://devcenter.heroku.com/articles/create-a-java-web-application-using-embedded-tomcat).
+Meidän onneksemme Eclipsessä on vakiona mukana Maven-plugin, joka huolehtii riippuvuuksien asentamisesta automaattisesti.
+
+Tämän projektin `pom.xml` on rakennettu noudattaen Heroku-pilvialustan esimerkkiä ["Create a Java Web Application Using Embedded Tomcat"](https://devcenter.heroku.com/articles/create-a-java-web-application-using-embedded-tomcat).
 
 ### JavaScript front-end
 
