@@ -31,7 +31,21 @@ Esimerkkisovelluksen Java-osuus koostuu kolmesta luokasta sekä palvelimen käyn
 * `id` (long)
 * `title` (String)
 
-[ShoppingListItemDao](src/main/java/database/ShoppingListItemDao.java)-luokka esittää DAO-mallin mukaista tietokantaluokkaa joka vastaa tiedon välittämisestä tietokannan ja muiden Java-luokkien välillä. Esimerkkisovelluksen yksinkertaistamiseksi ja sen riippuvuuksien minimoimiseksi luokka on toteutettu pitämään tietovarastonaan yksinkertaista `ArrayList`-oliota, joka alustetaan aina palvelimen uudelleenkäynnistyksen yhteydessä. 
+[ShoppingListItemDao](src/main/java/database/ShoppingListItemDao.java)-luokka esittää DAO-mallin mukaisen tietokantaluokan rajapintaa, joka määrittelee tiedon välittämisen tavat tietokannan ja muiden Java-luokkien välillä.
+
+Esimerkkisovelluksen yksinkertaistamiseksi ja sen riippuvuuksien minimoimiseksi varsinainen DAO-toiminnallisuus on toteutettu [FakeShoppingListItemDao](src/main/java/database/FakeShoppingListItemDao.java)-luokkana, joka imitoi ulkoisesti oikean DAO-luokan toimintaa. Todellisuudessa tämä luokka käyttää tietovarastonaan yksinkertaista `ArrayList`-oliota, joka alustetaan aina palvelimen uudelleenkäynnistyksen yhteydessä. 
+
+### JDBC ja JDBCShoppingListItemDao
+
+Mikäli esimerkkiohjelmassa halutaan hyödyntää oikeaa tietokantaa, jonka avulla ohjelman tiedot säilyvät myös uudelleenkäynnistysten aikana, voidaan se tehdä luomalla tarkoitukseen sopiva DAO-luokka. [JDBCShoppingListItemDao](src/main/java/database/JDBCShoppingListItemDao.java)-luokka on tehty esimerkkipohjaksi, jota kehittämällä voit toteuttaa oikean DAO-luokan JDBC-teknologian ja tietokannan avulla. Oikean tietokannan käyttöönotto ei muun ohjelman osalta vaadi muita muutoksia, kuin [`ShoppingListRestServlet`](src/main/java/servlet/ShoppingListRestServlet.java)-luokan dao-muuttujan alustamisen:
+
+```java    
+// Ennen:
+private ShoppingListItemDao dao = new FakeShoppingListItemDao();
+
+// Jälkeen:
+private ShoppingListItemDao dao = new JDBCShoppingListItemDao();
+```
 
 ### Tomcat-palvelinohjelmisto
 
