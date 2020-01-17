@@ -10,7 +10,7 @@ public interface ShoppingListItemDao {
 
     public ShoppingListItem getItem(long id);
 
-    public ShoppingListItem addItem(ShoppingListItem newItem);
+    public boolean addItem(ShoppingListItem newItem);
 
     public boolean removeItem(ShoppingListItem item);
 }

@@ -41,9 +41,11 @@ public class ShoppingListRestServlet extends HttpServlet {
         // convert the read JSON input from a String into a ShoppingListItem object:
         ShoppingListItem newItem = new Gson().fromJson(jsonInput, ShoppingListItem.class);
 
-        ShoppingListItem created = dao.addItem(newItem);
+        // dao class adds the generated id to the item
+        dao.addItem(newItem);
 
-        String jsonOutput = new Gson().toJson(created);
+        // write the updated object, which now has an id and a title
+        String jsonOutput = new Gson().toJson(newItem);
 
         resp.setContentType("application/json; charset=UTF-8");
         resp.getWriter().println(jsonOutput);

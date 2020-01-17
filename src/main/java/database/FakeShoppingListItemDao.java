@@ -44,10 +44,9 @@ public class FakeShoppingListItemDao implements ShoppingListItemDao {
         return items.stream().filter(item -> item.getId() == id).findFirst().orElse(null);
     }
 
-    public ShoppingListItem addItem(ShoppingListItem newItem) {
+    public boolean addItem(ShoppingListItem newItem) {
         newItem.setId(nextId++);
-        items.add(newItem);
-        return newItem;
+        return items.add(newItem);
     }
 
     public boolean removeItem(ShoppingListItem item) {

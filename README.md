@@ -373,7 +373,9 @@ form.onsubmit = () => {
     return false; // prevent reloading the page
 }
 ```
-Käsittelijä käytännössä etsii lomakkeelta ensimmäisen input-elementin (`form.querySelector("input")`) ja käyttää siihen syötettyä arvoa `title`-attribuuttina luodessaan uuden JavaScript-olion. Tämän jälkeen tapahtumankäsittelijä kutsuu saman `ShoppingListItem`-olion `storeItem`-metodia, joka lähettää luodun olion palvelimelle.
+Käsittelijä käytännössä etsii lomakkeelta ensimmäisen input-elementin (`form.querySelector("input")`) ja käyttää siihen syötettyä arvoa `title`-attribuuttina luodessaan uuden JavaScript-olion. Tämän jälkeen tapahtumankäsittelijä kutsuu saman `ShoppingListItem`-olion `storeItem`-metodia, joka lähettää luodun olion palvelimelle. Huomaa, että `id` luodaan vasta "tietokantatasolla", eli luodulle `newItem` oliolle ei asetettu vielä id:tä. 
+
+Lomakkeen lähettäminen ei lisää vielä uutta riviä ostoslistaan, vaan käyttöliittymän päivitys tapahtuu `storeItem`-metodin saatua palvelimelta vastauksen operaation onnistumisesta. Palvelimen vastaus sisältää myös luodun `id`:n, jota käytetään myöhemmin esimerkiksi luotua riviä poistettaessa.
 
 #### 🤔 Pohdittavaa
 1. Mikä on edellä olevan lomakkeen käsittelyn suoritusjärjestys, kun metodin keskivaiheilla oleva kutsu `storeItem`-metodiin on asynkroninen? 
@@ -386,4 +388,4 @@ Tämä dokumentaatio on kirjoitettu [markdown](https://guides.github.com/feature
 
 ## Lisenssi
 
-Tämä oppimateriaali on lisensoitu [Creative Commons BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/) -lisenssillä. 
+Tämän oppimateriaalin on kehittänyt Teemu Havulinna ja se on lisensoitu [Creative Commons BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/) -lisenssillä. 

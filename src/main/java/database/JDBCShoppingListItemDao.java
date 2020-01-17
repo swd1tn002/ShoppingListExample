@@ -21,8 +21,8 @@ public class JDBCShoppingListItemDao implements ShoppingListItemDao {
     }
 
     @Override
-    public ShoppingListItem addItem(ShoppingListItem newItem) {
-        return null;
+    public boolean addItem(ShoppingListItem newItem) {
+        return false;
     }
 
     @Override
