@@ -37,14 +37,11 @@ Esimerkkisovelluksen yksinkertaistamiseksi ja sen riippuvuuksien minimoimiseksi 
 
 ### JDBC ja JDBCShoppingListItemDao
 
-Mikäli esimerkkiohjelmassa halutaan hyödyntää oikeaa tietokantaa, jonka avulla ohjelman tiedot säilyvät myös uudelleenkäynnistysten aikana, voidaan se tehdä luomalla tarkoitukseen sopiva DAO-luokka. [JDBCShoppingListItemDao](src/main/java/database/JDBCShoppingListItemDao.java)-luokka on tehty esimerkkipohjaksi, jota kehittämällä voit toteuttaa oikean DAO-luokan JDBC-teknologian ja tietokannan avulla. Oikean tietokannan käyttöönotto ei muun ohjelman osalta vaadi muita muutoksia, kuin [`ShoppingListRestServlet`](src/main/java/servlet/ShoppingListRestServlet.java)-luokan dao-muuttujan alustamisen:
+Mikäli esimerkkiohjelmassa halutaan hyödyntää oikeaa tietokantaa, jonka avulla ohjelman tiedot säilyvät myös uudelleenkäynnistysten aikana, voidaan se tehdä luomalla tarkoitukseen sopiva DAO-luokka. [JDBCShoppingListItemDao](src/main/java/database/JDBCShoppingListItemDao.java)-luokka on tehty esimerkkipohjaksi, jota kehittämällä voit toteuttaa oikean DAO-luokan JDBC-teknologian ja tietokannan avulla. Oikean tietokannan käyttöönotto ei muun ohjelman osalta vaadi muita muutoksia, kuin [`ShoppingListRestServlet`](src/main/java/servlet/ShoppingListRestServlet.java)-luokan dao-muuttujan alustamisen eri luokan oliolla:
 
-```java    
-// Ennen:
-private ShoppingListItemDao dao = new FakeShoppingListItemDao();
-
-// Jälkeen:
-private ShoppingListItemDao dao = new JDBCShoppingListItemDao();
+```diff
+-private ShoppingListItemDao dao = new FakeShoppingListItemDao();
++private ShoppingListItemDao dao = new JDBCShoppingListItemDao();
 ```
 
 ### Tomcat-palvelinohjelmisto
