@@ -1,35 +1,35 @@
 class ShoppingListApp {
     constructor(container, itemTemplate, form) {
-        this._container = container;
-        this._itemTemplate = itemTemplate;
-        this._initForm(form);
+        this.container = container;
+        this.itemTemplate = itemTemplate;
+        this.initForm(form);
         
-        this._restUrl = '/api/shoppingList/items';
-        this._items = [];
+        this.restUrl = '/api/shoppingList/items';
+        this.items = [];
     }
 
     async load() {
         try {
-            let response = await fetch(this._restUrl);
-            this._items = await response.json();
-            this._render();
+            let response = await fetch(this.restUrl);
+            this.items = await response.json();
+            this.render();
         } catch (error) {
             console.error(error);
             alert('An error occured. Please check the consoles of the browser and the backend.');
         }
     }
 
-    _render() {
-        this._container.innerHTML = ""; // Clear contents of the container
-        for (let item of this._items) {
-            let itemNode = this._renderItem(item);
-            this._container.appendChild(itemNode);
+    render() {
+        this.container.innerHTML = ''; // Clear contents of the container
+        for (let item of this.items) {
+            let itemNode = this.renderItem(item);
+            this.container.appendChild(itemNode);
         }
     }
 
-    _renderItem(item) {
+    renderItem(item) {
         // Make a copy of the template (true to make a deep copy)
-        let newNode = document.importNode(this._itemTemplate.content, true);
+        let newNode = document.importNode(this.itemTemplate.content, true);
         let removeButton = newNode.querySelector('.remove');
 
         newNode.querySelector('.title').innerText = item.title;
@@ -43,7 +43,7 @@ class ShoppingListApp {
 
     async storeItem(newItem) {
         try {
-            let response = await fetch(this._restUrl, {
+            let response = await fetch(this.restUrl, {
                 method: 'POST',
                 body: JSON.stringify(newItem),
                 headers: {
@@ -51,8 +51,8 @@ class ShoppingListApp {
                 }
             });
             let json = await response.json();
-            this._items.push(json);
-            this._render();
+            this.items.push(json);
+            this.render();
             return true;
         } catch (error) {
             console.error(error);
@@ -63,24 +63,24 @@ class ShoppingListApp {
 
     async deleteItem(deleted) {
         try {
-            let response = await fetch(this._restUrl + `?id=${deleted.id}`, { method: 'DELETE' });
-            this._items = this._items.filter(item => item !== deleted);
-            this._render();
+            let response = await fetch(this.restUrl + `?id=${deleted.id}`, { method: 'DELETE' });
+            this.items = this.items.filter(item => item !== deleted);
+            this.render();
         } catch (error) {
             console.error(error);
             alert('An error occured. Please check the consoles of the browser and the backend.');
         }
     }
 
-    _initForm(form) {
+    initForm(form) {
         form.onsubmit = () => {
-            let input = form.querySelector("input");
+            let input = form.querySelector('input');
             let newItem = {
                 title: input.value
             };
             this.storeItem(newItem);
 
-            input.value = ""; // clear contents of input field after saving
+            input.value = ''; // clear contents of input field after saving
             return false; // prevent reloading the page
         }
     }

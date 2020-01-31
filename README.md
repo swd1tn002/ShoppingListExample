@@ -177,18 +177,18 @@ Syvien sisäkkäisten rakenteiden välttämiseksi asynkronisten funktioiden tote
 Esimerkkikoodin `app.js`-tiedostossa peräkkäiset asynkroniset `fetch`- ja `json`-kutsut palauttavat `Promise`-oliota. `Promise`-olion tapahtumankuuntelija asetetaan kutsumalla `Promise`n `then`-metodia ja antamalla sille callback-funktio. Peräkkäisiä `Promise`-oliota voidaan myös ketjuttaa seuraavasti, jolloin ensimmäisenä `Promise`n `then`-metodille annettu funktio suoritetaan aina ennen seuraavia kutsuja, ja edellisen `then`-kuuntelijan palauttama arvo välitetään parametrina seuraavalle kuuntelijalle:
 
 ```javascript
-fetch("/api/shoppingList/items")
+fetch('/api/shoppingList/items')
     .then((response) => response.json())
-    .then((json) => this._items = json)
-    .then(() => this._render())
+    .then((json) => this.items = json)
+    .then(() => this.render())
 ```
 
 Then-kutsujen ketjuttaminen aiheuttaa kuitenkin edelleen haasteitaan koodin luettavuudelle. Sama koodi voidaan kirjoittaa vielä yksinkertaisemmalla tavalla siten, että se hyödyntää `Promise`-toimintamallia, mutta näyttää ulkoisesti synkroniselta. Tämä tapahtuu hyödyntäen JavaScriptin `await`-avainsanaa:
 
 ```javascript
-let response = await fetch("/api/shoppingList/items");
-this._items = await response.json();
-this._render();
+let response = await fetch('/api/shoppingList/items');
+this.items = await response.json();
+this.render();
 ```
 *[src/main/webapp/js/app.js](src/main/webapp/js/app.js)*
 
@@ -200,8 +200,8 @@ async deleteItem(deleted) {
         `/api/shoppingList/items?id=${deleted.id}`,
         { method: 'DELETE' }
     );
-    this._items = this._items.filter(item => item !== deleted);
-    this._render();
+    this.items = this.items.filter(item => item !== deleted);
+    this.render();
 }
 ```
 *[src/main/webapp/js/app.js](src/main/webapp/js/app.js)*
@@ -297,9 +297,9 @@ protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IO
 JavaScript-puolella palvelimen tuottamat JSON-rakenteet ovat valmiiksi kielen tukemassa muodossa, joten muunnosta ei JS-koodissa tarvitse erikseen tehdä. `fetch`-kutsun palauttama [Response-olio](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Response_objects) antaa JSON:ia vastaavan JavaScript-olion promiseen käärittynä, kun kutsumme sen `json()`-metodia (katso [app.js](src/main/webapp/js/app.js)):
 
 ```javascript
-let response = await fetch("/api/shoppingList/items");
-this._items = await response.json();
-this._render();
+let response = await fetch('/api/shoppingList/items');
+this.items = await response.json();
+this.render();
 ```
 
 ## Dynaamisesti haetun datan näyttäminen sivulla
@@ -363,17 +363,17 @@ Uuden `ShoppingListItem`-olion luomista varten JavaScript-koodissa asetetaan `on
 
 ```javascript
 form.onsubmit = () => {
-    let input = form.querySelector("input");
+    let input = form.querySelector('input');
     let newItem = {
         title: input.value
     };
     this.storeItem(newItem);
 
-    input.value = ""; // clear contents of input field after saving
+    input.value = ''; // clear contents of input field after saving
     return false; // prevent reloading the page
 }
 ```
-Käsittelijä käytännössä etsii lomakkeelta ensimmäisen input-elementin (`form.querySelector("input")`) ja käyttää siihen syötettyä arvoa `title`-attribuuttina luodessaan uuden JavaScript-olion. Tämän jälkeen tapahtumankäsittelijä kutsuu saman `ShoppingListItem`-olion `storeItem`-metodia, joka lähettää luodun olion palvelimelle. Huomaa, että `id` luodaan vasta "tietokantatasolla", eli luodulle `newItem` oliolle ei asetettu vielä id:tä. 
+Käsittelijä käytännössä etsii lomakkeelta ensimmäisen input-elementin (`form.querySelector('input')`) ja käyttää siihen syötettyä arvoa `title`-attribuuttina luodessaan uuden JavaScript-olion. Tämän jälkeen tapahtumankäsittelijä kutsuu saman `ShoppingListItem`-olion `storeItem`-metodia, joka lähettää luodun olion palvelimelle. Huomaa, että `id` luodaan vasta "tietokantatasolla", eli luodulle `newItem` oliolle ei asetettu vielä id:tä. 
 
 Lomakkeen lähettäminen ei lisää vielä uutta riviä ostoslistaan, vaan käyttöliittymän päivitys tapahtuu `storeItem`-metodin saatua palvelimelta vastauksen operaation onnistumisesta. Palvelimen vastaus sisältää myös luodun `id`:n, jota käytetään myöhemmin esimerkiksi luotua riviä poistettaessa.
 
