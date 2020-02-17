@@ -303,7 +303,7 @@ public class ShoppingListItem {
 ```
 
 #### JavaScript ↔️ Java ↔️ JavaScript
-JSON-tiedostomuoto sopii erinomaisesti eri ohjelmointikielien väliseen tiedonvälitykseen ja eri kielillä toteutetut oliot on muutettavissa toisen kielen olioksi parhaassa tapauksessa automaattisesti. JSON-muunnoksia varten tässä esimerkkiprojektissa hyödynnetään Java-puolella Googlen kehittämää [Gson-kirjastoa](https://github.com/google/gson). Gson-kirjasto ei ole osa Javan standardikirjastoa, vaan se on lisätty projektiin Maven-työkalun avulla määrittelemällä se [pom.xml](pom.xml)-tiedostoon.
+JSON-tiedostomuoto sopii erinomaisesti eri ohjelmointikielien väliseen tiedonvälitykseen ja eri kielillä toteutetut oliot on muutettavissa toisen kielen olioksi parhaassa tapauksessa automaattisesti. JSON-muunnoksia varten tässä esimerkkiprojektissa hyödynnetään Java-puolella Googlen kehittämää [Gson-kirjastoa](https://github.com/google/gson). Gson-kirjasto ei ole osa Javan standardikirjastoa, vaan se on lisätty projektiin riippuvuudeksi [pom.xml](pom.xml)-tiedostoon.
 
 Edellä esitetty JSON-muotoinen esitys ostoslistan sisällöstä generoidaan palvelimella [`ShoppingListRestServlet`](src/main/java/servlet/ShoppingListRestServlet.java)-luokan `doGet`-metodissa seuraavasti:
 
