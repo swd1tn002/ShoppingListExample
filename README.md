@@ -46,9 +46,9 @@ Mikäli esimerkkiohjelmassa halutaan hyödyntää oikeaa tietokantaa, jonka avul
 
 ### Tomcat-palvelinohjelmisto
 
-Servlet-pohjaiset sovellukset tarvitsevat aina jonkin suoritusympäristön, joka tällä esimerkkiprojektilla on nimeltään Tomcat. Tomcat ja muut sovelluksen riippuvuudet on helpointa asentaa Maven-työkalua käyttäen, jota varten projektista löytyy valmis "Project Object Model"-tiedosto eli [pom.xml](pom.xml).
+Servlet-pohjaiset sovellukset tarvitsevat aina jonkin suoritusympäristön, joka tällä esimerkkiprojektilla on nimeltään Tomcat. Tomcat voidaan asentaa ja sitä voidaan käyttää monilla eri tavoilla. Tämän projektin lähtökohtana on GitHubista löytyvä [Embedded Tomcat -projektipohja](https://github.com/haagahelia/embedded-tomcat-template). 
 
-Meidän onneksemme Eclipsessä on vakiona mukana Maven-plugin, joka huolehtii riippuvuuksien asentamisesta automaattisesti.
+Tutustu [projektipohjan dokumentaatioon](https://github.com/haagahelia/embedded-tomcat-template) saadaksesi tarkemmat tiedot projektin riippuvuuksista sekä servlettien ja JSP-sivujen käytöstä.
 
 Tämän projektin `pom.xml` on rakennettu noudattaen Heroku-pilvialustan esimerkkiä ["Create a Java Web Application Using Embedded Tomcat"](https://devcenter.heroku.com/articles/create-a-java-web-application-using-embedded-tomcat).
 
@@ -67,9 +67,32 @@ Lisäksi sovelluksessa hyödynnetään [Sakura](https://unpkg.com/sakura.css/css
 
 Suorittaaksesi sovelluksen ja muokataksesi sitä omalla koneellasi sinun on tuotava projekti GitHubista omaan Eclipseesi. Tämän pitäisi olla suoraviivainen operaatio Eclipsen import-ominaisuuden avulla, jonka käyttämiseksi voit [katsoa videon](https://www.youtube.com/watch?v=hiij77tpDM4) tai [selata ohjeita](https://www.google.com/search?q=eclipse+clone+from+github).
 
-Kun projekti on "kloonattu" ja Maven-työkalu on asentanut sen riippuvuudet, voit käynnistää back end -palvelimen suorittamalla tiedoston [`src/main/java/launch/Main.java`](src/main/java/launch/Main.java). Main-luokan tarkoitus on käynnistää Tomcat-palvelin [tämän tutoriaalin](https://devcenter.heroku.com/articles/create-a-java-web-application-using-embedded-tomcat) mukaisesti ja Main-luokan sisältöä ei tarvitse ymmärtää tämän oppimateriaalin seuraamiseksi.
+Kun projekti on "kloonattu" ja sen riippuvuudet on asennettu, voit käynnistää back end -palvelimen suorittamalla tiedoston [`src/main/java/launch/Main.java`](src/main/java/launch/Main.java). Main-luokan tarkoitus on käynnistää Tomcat-palvelin. Main-luokan sisältöä ei tarvitse kokonaisuudessaan ymmärtää tämän oppimateriaalin seuraamiseksi, mutta yksinkertaisuudessaan siellä luodaan uusi `Tomcat`-olio, joka asetetaan kuuntelemaan sille annettua porttia:
 
-Kun palvelin on käynnistynyt, ota siihen yhteys selaimellasi kirjoittamalla osoiteriville http://localhost:8080.
+```java
+import org.apache.catalina.startup.Tomcat;
+// + muut riippuvuudet
+
+public class Main {
+
+    public static void main(String[] args) throws Exception {
+
+        // Luodaan uusi palvelinolio:
+        Tomcat tomcat = new Tomcat();
+
+        // Asetetaan kuunneltava portti (http://localhost:8080)
+        tomcat.setPort(8080);
+
+        // ...muiden asetusten määrittely...
+
+        // Palvelimen käynnistäminen:
+        tomcat.start();
+        tomcat.getServer().await();
+    }
+}
+```
+
+Suorita Main-luokka kuten suorittaisit itse kirjoittamasi main-metodin sisältämän luokan. Kun palvelin on käynnistynyt, ota siihen yhteys selaimellasi kirjoittamalla osoiteriville http://localhost:8080.
 
 <img src="documentation/assets/img/app.png" alt="Shopping List Demo App" style="max-width: 300px;"/>
 
@@ -151,13 +174,30 @@ Erillisiä kirjastoja välttämällä opit kirjoittamaan koodiasi yleisemmällä
 
 Ajax-teknologioiden asynkronisuus johtuu siitä, että JavaScript suoritetaan vain yhdessä säikeessä, jossa suoritetaan kerrallaan vain yhtä lauseketta. Jos esimerkiksi tiedonsiirto tehtäisiin synkronisesti, jumittuisi koko JavaScript-sovellus siksi aikaa, kunnes tiedonsiirto valmistuu. Voit lukea lisää asynkronisesta ohjelmoinnista esimerkiksi ["Understanding Asynchronous JavaScript"](https://blog.bitsrc.io/understanding-asynchronous-javascript-the-event-loop-74cd408419ff)-artikkelista ja Mozillan ["Asynchronous JavaScript"](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous)-oppimateriaalista.
 
-Hitaiden kutsujen ongelma on ratkaistu JavaScript-maailmassa antamalla "hitaalle koodille" funktio, joka sen tulee suorittaa operaation valmistuttua. Tällaisia funktioita kutsutaan ns. callback-funktioiksi. 
+**JavaScript-ohjelman suoritus ei siis odota asynkronisten operaatioiden valmistumista, vaan suoritus siirtyy seuraavalle koodiriville heti edellisen operaation käynnistyttyä**. Tämä aiheuttaa ajoittain ongelmia, kuten esimerkiksi seuraavassa kuvitteellisessa esimerkissä:
+
+```javascript
+database.saveItem({ id: 100, name: "This will be stored asyncronously" });
+database.removeItem(100); // tämä kutsu suoritetaan jo ennen kuin edellinen on valmis!
+```
+
+Ohjelmalogiikkaan liittyy usein useita tilanteita, joissa asynkronisuus on haaste:
+1. operaatiot halutaan suorittaa tietyssä järjestyksessä
+1. seuraava operaatio riippuu edellisen operaation tuloksesta
+1. seuraava operaatio halutaan suorittaa vain, jos edellinen onnistui
+
+Näitä tilanteita varten on useita erilaisia tapoja, joilla suoritusjärjestys voidaan määrätä myös asynkronisille kutsuille. Ennen seuraavien kappaleiden lukemista sinun kannattaa katsoa video: [Intro to Promises incl async/await (Google Chrome Developers, YouTube)](https://youtu.be/7unX6hn5NA8).
+
+#### Callback
+
+Jos seuraavan operaation suoritus on riippuvainen edellisen asynkronisen operaation suorittamisesta, voidaan myöhemmät operaatiot toteuttaa erillisessä funktiossa, jota edellinen funktio kutsuu saatuaan oman suorituksensa valmiiksi. Tällaisia funktioita kutsutaan ns. **callback**-funktioiksi. 
 
 > Callback on oikeastaan tapahtumankäsittelijä, jonka "tapahtuma" on "palvelupyynnön valmistuminen"!
 > 
 > *Tommi Tuura, https://www.cs.helsinki.fi/u/ttuura/otk-js/asynkronisuus.html*
 
-Kun koodissa on tarpeen tehdä lukuisia peräkkäisiä hitaita operaatioita, syntyy helposti syviä sisäkkäisiä rakenteita, joissa callback-funktiot kutsuvat uusia hitaita operaatioita ja antavat jälleen parametreina uusia callback-funktioita:
+
+Tässä kuvitteellisessa esimerkissä on useita toisistaan riippuvia asynkronisia funktiokutsuja. Ensin haetaan käyttäjä, toiseksi hänen ostoslistansa, kolmanneksi ostoslistan tuotteet ja neljänneksi näytetään ne:
 
 ```javascript
 getUser(function(user) {
@@ -168,6 +208,10 @@ getUser(function(user) {
   });
 });
 ```
+
+Callback-funktioilla syntyy helposti syviä sisäkkäisiä rakenteita, joissa callback-funktiot kutsuvat uusia hitaita operaatioita ja antavat jälleen parametreina uusia callback-funktioita. Tätä ongelmaa varten on kehitetty Promise-luokka.
+
+#### Promise
 
 Syvien sisäkkäisten rakenteiden välttämiseksi asynkronisten funktioiden toteutustavaksi on vakiintunut [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)-luokka, jonka avulla useita asynkronisia kutsuja saadaan kätevästi ketjutettua. 
 
@@ -180,7 +224,13 @@ fetch('/api/shoppingList/items')
     .then(() => this.render())
 ```
 
-Then-kutsujen ketjuttaminen aiheuttaa kuitenkin edelleen haasteitaan koodin luettavuudelle. Sama koodi voidaan kirjoittaa vielä yksinkertaisemmalla tavalla siten, että se hyödyntää `Promise`-toimintamallia, mutta näyttää ulkoisesti synkroniselta. Tämä tapahtuu hyödyntäen JavaScriptin `await`-avainsanaa:
+Tutustu Promise-oliota hyödyntävään ohjelmointityyliin tarkemmin Googlen artikkelissa [JavaScript Promises: an Introduction](https://developers.google.com/web/fundamentals/primers/promises).
+
+Then-kutsujen ketjuttaminen aiheuttaa edelleen haasteitaan koodin luettavuudelle. 
+
+#### Async ja Await
+
+Edellä esitetty `then`-metodeja kutsuva koodi voidaan kirjoittaa vielä yksinkertaisemmalla tavalla siten, että se hyödyntää `Promise`-toimintamallia, mutta näyttää ulkoisesti synkroniselta. Tämä tapahtuu hyödyntäen JavaScriptin `await`-avainsanaa:
 
 ```javascript
 let response = await fetch('/api/shoppingList/items');
