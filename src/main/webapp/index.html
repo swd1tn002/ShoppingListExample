@@ -54,14 +54,12 @@
     </template>
 
     <script>
-        (function () {
-            let container = document.querySelector("#list-items");
-            let template = document.querySelector("#list-item-template");
-            let form = document.querySelector("#add-new-form");
+        let container = document.querySelector("#list-items");
+        let template = document.querySelector("#list-item-template");
+        let form = document.querySelector("#add-new-form");
 
-            let app = new ShoppingListApp(container, template, form);
-            app.load();
-        })();
+        let app = new ShoppingListApp(container, template, form);
+        app.load();
     </script>
 
 </body>

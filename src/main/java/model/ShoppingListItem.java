@@ -6,7 +6,7 @@ public class ShoppingListItem {
     private String title;
 
     /**
-     * Empty constructor only used by Gson when converting JSON Stringsto Java
+     * Empty constructor only used by Gson when converting JSON Strings to Java
      * objects. Set to private to prevent creating uninitialized objects.
      */
     @SuppressWarnings("unused")
