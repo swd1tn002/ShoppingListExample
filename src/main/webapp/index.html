@@ -24,7 +24,7 @@
         <thead>
             <tr>
                 <th>Title</th>
-                <th></th>
+                <th><input type="button" id="refresh" value="🔄 refresh" /></th>
             </tr>
         </thead>
         <tbody id="list-items">
@@ -49,7 +49,7 @@
     <template id="list-item-template">
         <tr>
             <td class="title"></td>
-            <td><button class="remove">&times;</button></td>
+            <td><button class="remove">&times; remove</button></td>
         </tr>
     </template>
 
@@ -58,8 +58,9 @@
         let container = document.querySelector("#list-items");
         let template = document.querySelector("#list-item-template");
         let form = document.querySelector("#add-new-form");
+        let refreshBtn = document.querySelector("#refresh");
 
-        let app = new ShoppingListApp(container, template, form);
+        let app = new ShoppingListApp(container, template, form, refreshBtn);
         app.load();
     }
     start();

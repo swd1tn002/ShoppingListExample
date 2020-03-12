@@ -1,11 +1,15 @@
 class ShoppingListApp {
-    constructor(container, itemTemplate, form) {
+    constructor(container, itemTemplate, form, refreshButton) {
         this.container = container;
         this.itemTemplate = itemTemplate;
         this.initForm(form);
         
         this.restUrl = '/api/shoppingList/items';
         this.items = [];
+
+        refreshButton.onclick = () => {
+            this.load();
+        };
     }
 
     async load() {
@@ -13,9 +17,11 @@ class ShoppingListApp {
             let response = await fetch(this.restUrl);
             this.items = await response.json();
             this.render();
+            return true;
         } catch (error) {
             console.error(error);
             alert('An error occured. Please check the consoles of the browser and the backend.');
+            return false;
         }
     }
 
@@ -66,9 +72,11 @@ class ShoppingListApp {
             let response = await fetch(this.restUrl + `?id=${deleted.id}`, { method: 'DELETE' });
             this.items = this.items.filter(item => item !== deleted);
             this.render();
+            return true;
         } catch (error) {
             console.error(error);
             alert('An error occured. Please check the consoles of the browser and the backend.');
+            return false;
         }
     }
 
