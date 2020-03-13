@@ -132,14 +132,14 @@ Nuolifunktioiden ja tavallisten anonyymien funktioiden syntaksin lisäksi myös 
 Käytännössä edellä esitetty W3Schools:in selitys tarkoittaa sitä, että kahdesta tätä sovellusta varten koodatuista `onclick`-tapahtumakuuntelijoista vain jälkimmäinen oikeasti toimii:
 
 ```javascript
-// perinteinen anonyymi funktio 
+// tämä ei toimi:
 removeButton.onclick = function () {
-    this.deleteItem(item);
+    this.deleteItem(item); // `this` viittaa perinteisen funktion sisällä painikkeeseen!
 };
 
-// nuolifunktio
+// tämä toimii:
 removeButton.onclick = () => {
-    this.deleteItem(item);
+    this.deleteItem(item); // `this` viittaa nuolifunktion sisällä "funktiota ympäröivään olioon"
 };
 ```
 
@@ -174,11 +174,15 @@ Erillisiä kirjastoja välttämällä opit kirjoittamaan koodiasi yleisemmällä
 
 Ajax-teknologioiden asynkronisuus johtuu siitä, että JavaScript suoritetaan vain yhdessä säikeessä, jossa suoritetaan kerrallaan vain yhtä lauseketta. Jos esimerkiksi tiedonsiirto tehtäisiin synkronisesti, jumittuisi koko JavaScript-sovellus siksi aikaa, kunnes tiedonsiirto valmistuu. Voit lukea lisää asynkronisesta ohjelmoinnista esimerkiksi ["Understanding Asynchronous JavaScript"](https://blog.bitsrc.io/understanding-asynchronous-javascript-the-event-loop-74cd408419ff)-artikkelista ja Mozillan ["Asynchronous JavaScript"](https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Asynchronous)-oppimateriaalista.
 
-**JavaScript-ohjelman suoritus ei siis odota asynkronisten operaatioiden valmistumista, vaan suoritus siirtyy seuraavalle koodiriville heti edellisen operaation käynnistyttyä**. Tämä aiheuttaa ajoittain ongelmia, kuten esimerkiksi seuraavassa kuvitteellisessa esimerkissä:
+**JavaScript-ohjelman suoritus ei siis odota asynkronisten operaatioiden valmistumista, vaan suoritus siirtyy seuraavalle koodiriville heti edellisen operaation käynnistyttyä**. Tämä aiheuttaa ajoittain ongelmia, kuten esimerkiksi seuraavassa kuvitteellisessa esimerkissä, jossa kutsutaan kahta asynkronista funktiota:
 
 ```javascript
+// Ohjelma ei odota tämän asynkronisen kutsun valmistumista, vaan suoritus siirtyy heti eteenpäin:
 database.saveItem({ id: 100, name: "This will be stored asyncronously" });
-database.removeItem(100); // tämä kutsu suoritetaan jo ennen kuin edellinen on valmis!
+
+// Koska edellisen operaation valmistumista ei odotettu, emme voi olla varmoja, onko tallentaminen
+// vielä valmis. Tämä tulos siis saattaa sisältää juuri lisätyn tiedon tai tallennus on vielä kesken:
+database.getAllItems();
 ```
 
 Ohjelmalogiikkaan liittyy usein useita tilanteita, joissa asynkronisuus on haaste:
@@ -372,13 +376,26 @@ Tässä sovelluksessa dynaamisesti lisättävät elementit, eli ostoslistan tuot
 </template>
 ```
 
-Template-elementti haetaan JavaScript-koodissa `index.html`-tiedostossa, josta se annetaan konstruktoriparametrina `ShoppingListApp`-oliolle: 
+Template-elementti haetaan JavaScript-koodissa `index.html`-tiedostossa, josta se annetaan konstruktoriparametrina uudelle `ShoppingListApp`-oliolle: 
 
 ```javascript
+// elementti, jonka sisään ostoslistan rivit laitetaan
 let container = document.querySelector("#list-items");
-let template = document.querySelector("#list-item-template"); 
-// ...  
-let app = new ShoppingListApp(container, template, form);
+
+// yksittäisen rivin rakenteen määrittelevä template
+let template = document.querySelector("#list-item-template");
+
+// lomake, jolla lisätään uusia rivejä ostoslistalle
+let form = document.querySelector("#add-new-form");
+
+// painike, jolla saadaan päivitettyä sisältö palvelimelta
+let refreshBtn = document.querySelector("#refresh");
+
+// sivun elementit annetaan JavaScript-oliolle konstruktoriparametreina
+let app = new ShoppingListApp(container, template, form, refreshBtn);
+
+// ladataan ostoslistan tiedot palvelimelta ja näytetään ne sivulla
+app.load();
 ```
 
 `ShoppingListApp` käyttää saamaansa templatea lisätessään ostoslistan rivit sivulla valmiiksi olevaan `<tbody>`-elementtiin. Yllä olevassa konstruktorikutsussa annetaan parametrina `container`, joka viittaa sivulla olevan `<table>`-elementin `<tbody id="list-items">`-lapsielementtiin:
@@ -388,7 +405,7 @@ let app = new ShoppingListApp(container, template, form);
     <thead>
         <tr>
             <th>Title</th>
-            <th></th>
+            <th><input type="button" id="refresh" value="🔄 refresh" /></th>
         </tr>
     </thead>
     <tbody id="list-items">
@@ -425,9 +442,8 @@ Käsittelijä käytännössä etsii lomakkeelta ensimmäisen input-elementin (`f
 Lomakkeen lähettäminen ei lisää vielä uutta riviä ostoslistaan, vaan käyttöliittymän päivitys tapahtuu `storeItem`-metodin saatua palvelimelta vastauksen operaation onnistumisesta. Palvelimen vastaus sisältää myös luodun `id`:n, jota käytetään myöhemmin esimerkiksi luotua riviä poistettaessa.
 
 #### 🤔 Pohdittavaa
-1. Mikä on edellä olevan lomakkeen käsittelyn suoritusjärjestys, kun metodin keskivaiheilla oleva kutsu `storeItem`-metodiin on asynkroninen? 
+1. Mikä on edellä olevan lomakkeen käsittelyn suoritusjärjestys, kun tiedämme metodin keskivaiheilla olevan kutsun `storeItem`-metodiin olevan asynkroninen? 
 2. Tyhjennetäänkö lomakkeen kenttä ennen kuin palvelinkutsu on valmistunut vai vasta sen jälkeen? 
-3. Miten muutat suoritusjärjestyksen toisenlaiseksi käyttämällä `async` ja `await`-avainsanoja?
 
 ## Osallistu tämän materiaalin kehittämiseen
 
