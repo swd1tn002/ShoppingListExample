@@ -8,7 +8,7 @@ Voit tutustua palvelun toimintaan käytännössä joko asentamalla sovelluksen o
 
 https://shoppinglist-example.herokuapp.com/
 
-Herokussa toimiva versio on muokattu siten, että se näyttää kullekin käyttäjälle oman ostoslistan väärinkäytön ja häirinnän välttämiseksi. Sovellus toimii Herokussa ilmaisilla resursseilla, joten se menee usein lepotilaan. Lepotilasta herääminen kestää tovin, odota rauhassa. 
+Sovellus toimii Herokussa ilmaisilla resursseilla, joten se menee usein lepotilaan. Lepotilasta herääminen kestää tovin, odota rauhassa. Huomaathan myös, että esimerkkisovelluksessa ei ole käyttäjäkohtaista sisältöä, vaan ostoslista on sama kaikille käyttäjille.
 
 ## JS-koodin yhteensopivuudesta
 
