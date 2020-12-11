@@ -1,6 +1,7 @@
 package database;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import model.ShoppingListItem;
@@ -17,40 +18,37 @@ import model.ShoppingListItem;
 public class FakeShoppingListItemDao implements ShoppingListItemDao {
 
     private List<ShoppingListItem> items = new ArrayList<>();
+
     private int nextId = 1; // to provide each item an unique incrementing id
 
     public FakeShoppingListItemDao() {
         // Add a few initial values to start with:
-        items.add(new ShoppingListItem(nextId++, "Milk"));
-        items.add(new ShoppingListItem(nextId++, "Eggs"));
-        items.add(new ShoppingListItem(nextId++, "Bread"));
+        this.addItem(new ShoppingListItem(0, "Milk"));
+        this.addItem(new ShoppingListItem(0, "Eggs"));
+        this.addItem(new ShoppingListItem(0, "Bread"));
     }
 
     public List<ShoppingListItem> getAllItems() {
-        return items;
+        return Collections.unmodifiableList(items);
     }
 
     public ShoppingListItem getItem(long id) {
-        /*
-         * This method uses programming constructs that may not be familiar to you at
-         * this point.
-         * 
-         * For using streams and lambda expressions for finding a value see:
-         * https://www.baeldung.com/java-stream-filter-lambda
-         * 
-         * For using optional, potentially null values see:
-         * https://www.baeldung.com/java-optional-or-else-vs-or-else-get
-         */
-        return items.stream().filter(item -> item.getId() == id).findFirst().orElse(null);
+        synchronized (this) {
+            return items.stream().filter(item -> item.getId() == id).findFirst().orElse(null);
+        }
     }
 
     public boolean addItem(ShoppingListItem newItem) {
-        newItem.setId(nextId++);
-        return items.add(newItem);
+        synchronized (this) {
+            newItem.setId(nextId++);
+            return items.add(newItem);
+        }
     }
 
     public boolean removeItem(ShoppingListItem item) {
-        return items.remove(item); // returns true if item was removed
+        synchronized (this) {
+            return items.remove(item); // returns true if item was removed
+        }
     }
 
 }
