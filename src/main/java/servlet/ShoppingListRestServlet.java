@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
-import database.FakeShoppingListItemDao;
+import database.JDBCShoppingListItemDao;
 import database.ShoppingListItemDao;
 import model.ShoppingListItem;
 
@@ -19,7 +19,7 @@ import model.ShoppingListItem;
 @WebServlet("/api/shoppingList/items")
 public class ShoppingListRestServlet extends HttpServlet {
 
-    private ShoppingListItemDao dao = new FakeShoppingListItemDao();
+    private ShoppingListItemDao dao = new JDBCShoppingListItemDao();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
