@@ -6,9 +6,9 @@ Tähän dokumenttiin sekä tässä samassa Git-repositoriossa sijaitsevaan valmi
 
 Voit tutustua palvelun toimintaan käytännössä joko asentamalla sovelluksen omalle koneellesi tai käyttämällä sen julkaistua versiota osoitteessa:
 
-https://shoppinglist-example.herokuapp.com/
+https://shopping-list.rahtiapp.fi/
 
-Sovellus toimii Herokussa ilmaisilla resursseilla, joten se menee usein lepotilaan. Lepotilasta herääminen kestää tovin, odota rauhassa. Huomaathan myös, että esimerkkisovelluksessa ei ole käyttäjäkohtaista sisältöä, vaan ostoslista on sama kaikille käyttäjille.
+Huomioithan, että esimerkkisovellukseen ei ole toteutettu tunnistautumista tai käyttäjäkohtaista sisältöä, eli ostoslista on sama kaikille käyttäjille.
 
 ## JS-koodin yhteensopivuudesta
 
